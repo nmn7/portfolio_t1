@@ -16,7 +16,7 @@ const STEPS: TimelineStep[] = [
     title: 'Business Problems',
     icon: <Briefcase size={20} />,
     subtitle: 'Where everything begins',
-    description: 'Began by directly analyzing core operational leaks in enterprise settings. Rather than writing code immediately, focused on understanding the financial impact, user bottlenecks, and manual overhead in Pharma, Manufacturing, and Retail.',
+    description: 'Began by directly analyzing core operational leaks in enterprise settings. Rather than writing code immediately, focused on understanding the financial impact, user bottlenecks, and manual overhead in Pharma, Finance, and Retail.',
     impact: 'Developed an innate business-first mindset, focusing strictly on delivering measurable ROI.'
   },
   {
@@ -93,11 +93,11 @@ export default function MyStory() {
 
   return (
     <section id="story" data-section="story" style={{ position: 'relative' }}>
-      <div style={{ marginBottom: '60px' }}>
+      <div style={{ marginBottom: '30px' }}>
         <h2 className="title-section">
           My Story
         </h2>
-        <p className="body-lead" style={{ maxWidth: '600px' }}>
+        <p className="body-lead" style={{ maxWidth: '900px' }}>
           My career evolution has been a deliberate progression from understanding enterprise operations to deploying advanced autonomous systems.
         </p>
       </div>
@@ -240,7 +240,7 @@ export default function MyStory() {
             }}
           >
             <img
-              src="/naman_portrait.png"
+              src={`${import.meta.env.BASE_URL}naman_portrait.png`}
               alt="Naman Mehta Professional Portrait"
               style={{
                 width: '100%',

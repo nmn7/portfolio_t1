@@ -56,6 +56,7 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
 
   return (
     <nav
+      className="animate-slide-down"
       style={{
         position: 'fixed',
         top: 0,
@@ -84,25 +85,108 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
           transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        {/* Logo */}
-        <a
-          href="#hero"
-          data-cursor="pointer"
-          style={{
-            fontFamily: "'Outfit', sans-serif",
-            fontWeight: 800,
-            fontSize: '1.4rem',
-            color: viewMode === 'consultant' ? '#1F1F2E' : '#F5F5F5',
-            textDecoration: 'none',
-            letterSpacing: '-0.04em',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}
-        >
-          NM
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#3B82F6', display: 'inline-block' }} />
-        </a>
+        {/* Left: Logo & Theme Switch */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {/* Logo */}
+          <a
+            href="#hero"
+            data-cursor="pointer"
+            style={{
+              fontFamily: "'Outfit', sans-serif",
+              fontWeight: 800,
+              fontSize: '1.4rem',
+              color: viewMode === 'consultant' ? '#1F1F2E' : '#F5F5F5',
+              textDecoration: 'none',
+              letterSpacing: '-0.04em',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            NM
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#3B82F6', display: 'inline-block' }} />
+          </a>
+
+          {/* Theme Toggle (Dark / Light Switch) */}
+          <div
+            onClick={() => setViewMode(viewMode === 'engineer' ? 'consultant' : 'engineer')}
+            data-cursor="pointer"
+            aria-label="Toggle theme mode"
+            style={{
+              width: '56px',
+              height: '28px',
+              borderRadius: '14px',
+              backgroundColor: viewMode === 'engineer' ? '#000000' : '#e4e4e7',
+              border: viewMode === 'engineer' ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.08)',
+              position: 'relative',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 6px',
+              boxSizing: 'border-box',
+              transition: 'background-color 300ms cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms cubic-bezier(0.16, 1, 0.3, 1)'
+            }}
+          >
+            {/* Moon Icon (Left) */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '14px',
+              height: '14px',
+              color: '#ffffff',
+              opacity: viewMode === 'engineer' ? 1 : 0,
+              transition: 'opacity 200ms ease'
+            }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 3a9 9 0 1 0 9 9 9.75 9.75 0 0 1-9-9z" />
+              </svg>
+            </div>
+
+            {/* Spacer */}
+            <div style={{ flex: 1 }} />
+
+            {/* Sun Icon (Right) */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '14px',
+              height: '14px',
+              color: '#ffffff',
+              opacity: viewMode === 'consultant' ? 1 : 0,
+              transition: 'opacity 200ms ease'
+            }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            </div>
+
+            {/* Sliding circular knob */}
+            <div
+              style={{
+                width: '22px',
+                height: '22px',
+                borderRadius: '50%',
+                backgroundColor: '#ffffff',
+                position: 'absolute',
+                top: '2px',
+                left: viewMode === 'engineer' ? '30px' : '2px',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
+                transition: 'left 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+                zIndex: 2
+              }}
+            />
+          </div>
+        </div>
 
         {/* Links */}
         <div
@@ -154,59 +238,12 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
             ))}
           </ul>
 
-          {/* Reading Mode Toggle */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              padding: '2px',
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              borderRadius: '30px',
-              border: '1px solid var(--border-color)',
-              marginRight: '8px'
-            }}
-          >
-            <button
-              onClick={() => setViewMode('engineer')}
-              data-cursor="pointer"
-              style={{
-                padding: '4px 10px',
-                borderRadius: '20px',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                backgroundColor: viewMode === 'engineer' ? '#3B82F6' : 'transparent',
-                color: viewMode === 'engineer' ? '#FFFFFF' : 'var(--text-secondary)',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              ⚙️ Eng
-            </button>
-            <button
-              onClick={() => setViewMode('consultant')}
-              data-cursor="pointer"
-              style={{
-                padding: '4px 10px',
-                borderRadius: '20px',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                backgroundColor: viewMode === 'consultant' ? '#3B82F6' : 'transparent',
-                color: viewMode === 'consultant' ? '#FFFFFF' : 'var(--text-secondary)',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-              }}
-            >
-              💼 Cons
-            </button>
-          </div>
+
 
           {/* CTA Download Resume */}
           <a
             ref={resumeBtnRef}
-            href="/Naman_Mehta_Resume.pdf"
+            href={`${import.meta.env.BASE_URL}Naman_Mehta_Resume.pdf`}
             download
             className="btn btn-secondary"
             data-cursor="pointer"

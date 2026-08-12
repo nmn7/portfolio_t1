@@ -47,19 +47,19 @@ export default function Certifications() {
 
   return (
     <section id="certifications" data-section="certifications" style={{ position: 'relative' }}>
-      <div style={{ marginBottom: '60px' }}>
+      <div style={{ marginBottom: '30px' }}>
         <span style={{ color: '#3B82F6', fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           Validated Credentials
         </span>
         <h2 className="title-section" style={{ marginTop: '8px' }}>
           Certifications
         </h2>
-        <p className="body-lead" style={{ maxWidth: '600px' }}>
+        <p className="body-lead" style={{ maxWidth: '900px' }}>
           Industry-standard credentials validating cloud architecture, enterprise agile delivery, and intelligent automation capabilities.
         </p>
       </div>
 
-      <div 
+      <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
@@ -85,7 +85,7 @@ export default function Certifications() {
             }}
           >
             {/* Corner Decorative Ring Glow */}
-            <div 
+            <div
               style={{
                 position: 'absolute',
                 top: '-30px',
@@ -98,7 +98,7 @@ export default function Certifications() {
               }}
             />
 
-            <div 
+            <div
               style={{
                 width: '48px',
                 height: '48px',
@@ -121,9 +121,9 @@ export default function Certifications() {
               <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
                 {cert.issuer}
               </p>
-              
-              <div 
-                style={{ 
+
+              <div
+                style={{
                   display: 'inline-block',
                   fontSize: '0.75rem',
                   fontFamily: 'monospace',

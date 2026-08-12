@@ -10,7 +10,6 @@ import TechLandscape from './components/TechLandscape';
 import EngineeringPlayground from './components/EngineeringPlayground';
 import Experience from './components/Experience';
 import Certifications from './components/Certifications';
-import WritingThoughts from './components/WritingThoughts';
 import Contact from './components/Contact';
 
 export default function App() {
@@ -39,6 +38,37 @@ export default function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    // Scroll reveal observer
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-active');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.04,
+        rootMargin: '0px 0px -40px 0px'
+      }
+    );
+
+    // Observe all main sections
+    const elements = document.querySelectorAll('main > section, .reveal-on-scroll');
+    elements.forEach((el) => {
+      el.classList.add('reveal-init');
+      observer.observe(el);
+    });
+
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, [isLoading]);
 
   return (
     <>
@@ -83,11 +113,7 @@ export default function App() {
             {/* Roles Accordions */}
             <Experience />
 
-            {/* Badges Grid */}
             <Certifications />
-
-            {/* Publishing Board */}
-            <WritingThoughts />
 
             {/* Cinematic Contact Footer */}
             <Contact />

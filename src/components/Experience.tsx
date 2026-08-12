@@ -113,14 +113,14 @@ export default function Experience() {
 
   return (
     <section id="experience" data-section="experience" style={{ position: 'relative' }}>
-      <div style={{ marginBottom: '60px' }}>
+      <div style={{ marginBottom: '30px' }}>
         <span style={{ color: '#3B82F6', fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           Professional Journey
         </span>
         <h2 className="title-section" style={{ marginTop: '8px' }}>
           Work Experience
         </h2>
-        <p className="body-lead" style={{ maxWidth: '600px' }}>
+        <p className="body-lead" style={{ maxWidth: '900px' }}>
           Over eight years of experience building, deploying, and supporting enterprise software systems in pharma, retail, and manufacturing.
         </p>
       </div>

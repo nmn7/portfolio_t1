@@ -157,14 +157,14 @@ export default function EngineeringPlayground() {
 
   return (
     <section id="playground" data-section="playground" style={{ position: 'relative' }}>
-      <div style={{ marginBottom: '60px' }}>
+      <div style={{ marginBottom: '30px' }}>
         <span style={{ color: '#3B82F6', fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           Interactive Lab
         </span>
         <h2 className="title-section" style={{ marginTop: '8px' }}>
           Engineering Playground
         </h2>
-        <p className="body-lead" style={{ maxWidth: '600px' }}>
+        <p className="body-lead" style={{ maxWidth: '900px' }}>
           Explore interactive architectures detailing semantic API integrations, secure model routing, and production serverless setups.
         </p>
       </div>

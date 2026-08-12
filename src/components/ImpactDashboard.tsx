@@ -11,7 +11,7 @@ interface MetricProps {
 }
 
 function MetricCard({ target, prefix = '', suffix = '', label, description, icon }: MetricProps) {
-  const [count, setCount] = useState(0);
+  const [displayValue, setDisplayValue] = useState<string | number>('0');
   const [hasAnimated, setHasAnimated] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -21,25 +21,29 @@ function MetricCard({ target, prefix = '', suffix = '', label, description, icon
         const [entry] = entries;
         if (entry.isIntersecting && !hasAnimated) {
           setHasAnimated(true);
-          let start = 0;
           const duration = 1500; // 1.5s
-          const end = target;
-          if (start === end) return;
-
           const startTime = performance.now();
 
           const updateCount = (currentTime: number) => {
             const elapsedTime = currentTime - startTime;
             const progress = Math.min(elapsedTime / duration, 1);
-            
-            // Ease out quad formula
-            const easeProgress = progress * (2 - progress);
-            const currentCount = Math.floor(easeProgress * (end - start) + start);
-
-            setCount(currentCount);
 
             if (progress < 1) {
+              const targetStr = String(target);
+              const L = targetStr.length;
+              const numLocked = Math.floor(progress * L);
+              let jumbled = '';
+              for (let i = 0; i < L; i++) {
+                if (i < numLocked) {
+                  jumbled += targetStr[i];
+                } else {
+                  jumbled += Math.floor(Math.random() * 10);
+                }
+              }
+              setDisplayValue(jumbled);
               requestAnimationFrame(updateCount);
+            } else {
+              setDisplayValue(target);
             }
           };
 
@@ -77,7 +81,7 @@ function MetricCard({ target, prefix = '', suffix = '', label, description, icon
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div 
+        <div
           style={{
             width: '44px',
             height: '44px',
@@ -96,19 +100,19 @@ function MetricCard({ target, prefix = '', suffix = '', label, description, icon
       </div>
 
       <div>
-        <div 
-          style={{ 
-            fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', 
-            fontWeight: 800, 
-            color: 'var(--text-primary)', 
+        <div
+          style={{
+            fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+            fontWeight: 800,
+            color: 'var(--text-primary)',
             fontFamily: "'Outfit', sans-serif",
             lineHeight: 1.1,
             marginBottom: '8px'
           }}
         >
-          {prefix}{count}{suffix}
+          {prefix}{displayValue}{suffix}
         </div>
-        
+
         <h4 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
           {label}
         </h4>
@@ -123,19 +127,19 @@ function MetricCard({ target, prefix = '', suffix = '', label, description, icon
 export default function ImpactDashboard() {
   return (
     <section id="impact" data-section="impact" style={{ position: 'relative' }}>
-      <div style={{ marginBottom: '60px' }}>
+      <div style={{ marginBottom: '30px' }}>
         <span style={{ color: '#3B82F6', fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           Proven Results
         </span>
         <h2 className="title-section" style={{ marginTop: '8px' }}>
           Business Impact Dashboard
         </h2>
-        <p className="body-lead" style={{ maxWidth: '600px' }}>
+        <p className="body-lead" style={{ maxWidth: '900px' }}>
           Measurable commercial benefits, pipeline automation gains, and capital reductions delivered across global operations.
         </p>
       </div>
 
-      <div 
+      <div
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
@@ -166,11 +170,11 @@ export default function ImpactDashboard() {
           icon={<Zap size={22} />}
         />
         <MetricCard
-          target={44} // represents 45 -> 1 min (44 min saved)
-          prefix="-"
-          suffix="m Saved"
-          label="Manufacturing Cycle Time"
-          description="Inspection timelines optimized from 45 minutes down to 1 minute via localized Greengrass AI nodes."
+          target={10}
+          prefix="6-"
+          suffix="+"
+          label="FTE Hours Saved"
+          description="Inspection timelines optimized from 45 minutes down to 1 minute via localized Greengrass AI nodes, saving 6-10+ FTE hours in each project."
           icon={<Clock size={22} />}
         />
         <MetricCard

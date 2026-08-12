@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowRight, Layers, ShieldAlert, Cpu, BarChart3, Database, AlertCircle, ShieldCheck, Search, Lightbulb, Check, Terminal, Star, Volume2, XCircle, TrendingUp, Clock, Activity, Settings, RefreshCw, Filter, Tag, Camera, Plus, Users, CheckCircle2 } from 'lucide-react';
+import { Layers, ShieldAlert, Cpu, BarChart3, Database, AlertCircle, ShieldCheck, Search, Lightbulb, Check, Terminal, Settings } from 'lucide-react';
 
 interface CaseStudy {
   id: string;
@@ -18,1292 +18,168 @@ interface CaseStudy {
   architecture: React.ReactNode;
 }
 
-interface FeaturedProjectsProps {
-  viewMode: 'engineer' | 'consultant';
+import CrtCustomDashboard from './CrtCustomDashboard';
+import MaciCustomDashboard from './MaciCustomDashboard';
+import ExtractCustomDashboard from './ExtractCustomDashboard';
+import RakutenCustomDashboard from './RakutenCustomDashboard';
+import WorkforceCustomDashboard from './WorkforceCustomDashboard';
+
+const cardConfigMap: Record<string, {
+  shortTitle: string;
+  shortSubtitle: string;
+  cardTags: string[];
+  cardOutcome: string;
+  badgeColor: string;
+  glowColor: string;
+}> = {
+  bms: {
+    shortTitle: 'AI Pricing Intelligence Platform',
+    shortSubtitle: 'International Reference Pricing (IRP) & Most Favored Nation (MFN) Decision Support',
+    cardTags: ['Pharma', 'Enterprise AI'],
+    cardOutcome: 'Enterprise AI Decision Support',
+    badgeColor: '#3B82F6',
+    glowColor: 'rgba(59, 130, 246, 0.25)'
+  },
+  rakuten: {
+    shortTitle: 'GenAI Manufacturer Validation Platform',
+    shortSubtitle: 'Automating Warranty Claims Validation using LLM Agents',
+    cardTags: ['Retail', 'GenAI'],
+    cardOutcome: '30% Less Claims Effort',
+    badgeColor: '#EC4899',
+    glowColor: 'rgba(236, 72, 153, 0.25)'
+  },
+  crt: {
+    shortTitle: 'Customer Research Tool (CRT)',
+    shortSubtitle: 'Intelligent Customer Research & Class of Trade (COT) Platform',
+    cardTags: ['Pharma', 'Power Platform'],
+    cardOutcome: '90% Less Manual Validation',
+    badgeColor: '#6366F1',
+    glowColor: 'rgba(99, 102, 241, 0.25)'
+  },
+  extract: {
+    shortTitle: 'Extract.AI — Intelligent Document Processing Platform',
+    shortSubtitle: 'Turning unstructured invoices, contracts and documents into structured, validated data — at scale.',
+    cardTags: ['Pharma', 'GenAI'],
+    cardOutcome: '$6M+ Impact Delivered',
+    badgeColor: '#8B5CF6',
+    glowColor: 'rgba(139, 92, 246, 0.25)'
+  },
+  maci: {
+    shortTitle: 'MACI — AI-Powered Call Value Optimization',
+    shortSubtitle: 'Transforming manual STEM audio audits into end-to-end conversational intelligence platform processing call recordings, delivering automated scorecard reporting and performance analytics',
+    cardTags: ['Pharma', 'AI / Analytics'],
+    cardOutcome: 'AI-Driven Operations',
+    badgeColor: '#10B981',
+    glowColor: 'rgba(16, 185, 129, 0.25)'
+  },
+  workforce: {
+    shortTitle: 'Intelligent Digital Data Workforce — HCP/HCO Matching',
+    shortSubtitle: 'Automated Practitioner-to-Organization Precision Alignments',
+    cardTags: ['Healthcare', 'Operations'],
+    cardOutcome: '99% Match Precision',
+    badgeColor: '#F59E0B',
+    glowColor: 'rgba(245, 158, 11, 0.25)'
+  },
+  smartvision: {
+    shortTitle: 'Smart Vision',
+    shortSubtitle: 'Manufacturing Computer Vision at the Edge',
+    cardTags: ['Manufacturing', 'IoT / ML'],
+    cardOutcome: '45 min ➔ ~1 min Clearance',
+    badgeColor: '#06B6D4',
+    glowColor: 'rgba(6, 182, 212, 0.25)'
+  }
+};
+
+function renderLeftGraphic(projectId: string) {
+  switch (projectId) {
+    case 'bms':
+      return (
+        <svg width="100%" height="100%" viewBox="0 0 80 110" fill="none" style={{ display: 'block' }}>
+          <circle cx="40" cy="55" r="30" stroke="rgba(59, 130, 246, 0.15)" strokeWidth="1" />
+          <line x1="20" y1="35" x2="60" y2="75" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1" />
+          <line x1="20" y1="75" x2="60" y2="35" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1" />
+          <circle cx="20" cy="35" r="3.5" fill="#3B82F6" />
+          <circle cx="60" cy="75" r="3.5" fill="#10B981" />
+          <circle cx="20" cy="75" r="3.5" fill="#ea580c" />
+          <circle cx="60" cy="35" r="3.5" fill="#8B5CF6" />
+        </svg>
+      );
+    case 'rakuten':
+      return (
+        <svg width="100%" height="100%" viewBox="0 0 80 110" fill="none" style={{ display: 'block' }}>
+          <rect x="20" y="30" width="40" height="50" rx="6" fill="rgba(236, 72, 153, 0.05)" stroke="rgba(236, 72, 153, 0.2)" />
+          <path d="M30 55 L38 63 L50 47" stroke="#EC4899" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    case 'crt':
+      return (
+        <svg width="100%" height="100%" viewBox="0 0 80 110" fill="none" style={{ display: 'block' }}>
+          <rect x="20" y="25" width="40" height="60" rx="4" fill="rgba(99, 102, 241, 0.05)" stroke="rgba(99, 102, 241, 0.2)" />
+          <line x1="28" y1="40" x2="52" y2="40" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="2" />
+          <line x1="28" y1="55" x2="48" y2="55" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="2" />
+          <line x1="28" y1="70" x2="50" y2="70" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="2" />
+        </svg>
+      );
+    case 'extract':
+      return (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+          width: '100%',
+          background: 'radial-gradient(circle at center, #0f172a 0%, #020617 100%)',
+          padding: '8px',
+          boxSizing: 'border-box'
+        }}>
+          <span style={{ fontSize: '0.62rem', fontWeight: 900, color: '#8B5CF6', letterSpacing: '-0.02em', textTransform: 'uppercase' }}>Extract.AI</span>
+        </div>
+      );
+    case 'maci':
+      return (
+        <svg width="100%" height="100%" viewBox="0 0 80 110" fill="none" style={{ display: 'block' }}>
+          <line x1="15" y1="40" x2="15" y2="70" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="25" y1="25" x2="25" y2="85" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="35" y1="45" x2="35" y2="65" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="45" y1="20" x2="45" y2="90" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="55" y1="35" x2="55" y2="75" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+          <line x1="65" y1="45" x2="65" y2="65" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      );
+    case 'workforce':
+      return (
+        <svg width="100%" height="100%" viewBox="0 0 80 110" fill="none" style={{ display: 'block' }}>
+          <circle cx="40" cy="40" r="14" stroke="rgba(245, 158, 11, 0.2)" strokeWidth="1" />
+          <circle cx="40" cy="40" r="6" fill="#F59E0B" />
+          <line x1="40" y1="54" x2="40" y2="80" stroke="rgba(245, 158, 11, 0.3)" strokeWidth="1.5" />
+          <rect x="25" y="80" width="30" height="15" rx="3" fill="rgba(245, 158, 11, 0.08)" stroke="rgba(245, 158, 11, 0.2)" />
+        </svg>
+      );
+    case 'smartvision':
+      return (
+        <svg width="100%" height="100%" viewBox="0 0 80 110" fill="none" style={{ display: 'block' }}>
+          <circle cx="40" cy="55" r="22" stroke="#EF4444" strokeWidth="1.5" strokeDasharray="3 3" />
+          <circle cx="40" cy="55" r="14" fill="rgba(239, 68, 68, 0.1)" stroke="#EF4444" strokeWidth="1" />
+          <line x1="40" y1="20" x2="40" y2="90" stroke="rgba(239, 68, 68, 0.2)" strokeWidth="1" />
+          <line x1="10" y1="55" x2="70" y2="55" stroke="rgba(239, 68, 68, 0.2)" strokeWidth="1" />
+        </svg>
+      );
+    default:
+      return null;
+  }
 }
 
-function CrtCustomDashboard() {
-  const [selectedLookup, setSelectedLookup] = useState({
-    id: '123456',
-    name: 'ABC Health Center',
-    status: 'Active',
-    category: 'Disproportionate Share Hospital (DSH)',
-    address: '123 Main St, Springfield, IL 62701, USA'
-  });
-
-  const [sourceImageErrors, setSourceImageErrors] = useState<Record<string, boolean>>({});
-
-  const sources = [
-    { id: 'model_n', name: 'Model N', label: 'Customer Master', color: '#3B82F6', textIcon: 'N' },
-    { id: 'dea', name: 'DEA', label: 'DEA Portal', color: '#F59E0B', textIcon: '★' },
-    { id: 'ihin', name: 'ihin', label: 'HIN Portal', color: '#10B981', textIcon: 'ℹ' },
-    { id: 'hrsa', name: 'hrsa', label: '340B Program', color: '#EF4444', textIcon: 'H' },
-    { id: 'npi', name: 'npi', label: 'NPPES Registry', color: '#06B6D4', textIcon: 'NPI' },
-    { id: 'google', name: 'google', label: 'Search & Maps', color: '#EC4899', textIcon: 'G' },
-    { id: 'mdm', name: 'mdm', label: 'Master Data', color: '#8B5CF6', textIcon: '🗄' },
-    { id: 'excel', name: 'excel', label: 'User Spreadsheets', color: '#10B981', textIcon: '📊' },
-    { id: 'other', name: 'other', label: 'Client Catalogs', color: '#64748B', textIcon: '➕' }
-  ];
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', textAlign: 'left', width: '100%' }}>
-
-
-      {/* Row 1: Problem & Product */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-
-        {/* The Problem */}
-        <div style={{
-          backgroundColor: 'rgba(239, 68, 68, 0.01)',
-          border: '1px solid rgba(239, 68, 68, 0.15)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
-          <h4 style={{ fontSize: '0.9rem', color: '#EF4444', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            <AlertCircle size={16} />
-            The Problem
-          </h4>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-            Customer intelligence was fragmented across portals, databases, and files. Analysts and commercial teams had to manually research the same customer across multiple sources, reconcile identities, validate conflicting information, and collect evidence before the customer could be reliably classified.
-          </p>
-        </div>
-
-        {/* The Product */}
-        <div style={{
-          backgroundColor: 'rgba(16, 185, 129, 0.01)',
-          border: '1px solid rgba(16, 185, 129, 0.15)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
-          <h4 style={{ fontSize: '0.9rem', color: '#10B981', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            <ShieldCheck size={16} />
-            The Product
-          </h4>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-            CRT turns fragmented customer research into a repeatable validation workflow by automating compilation across sources and providing a unified cockpit.
-          </p>
-          
-          {/* Responsive SVG pipeline flow */}
-          <div style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.02)',
-            padding: '12px',
-            borderRadius: '10px',
-            border: '1px solid var(--border-color)',
-            marginTop: 'auto'
-          }}>
-            <svg viewBox="0 0 700 70" style={{ width: '100%', height: 'auto', overflow: 'visible' }}>
-              {/* Connectors */}
-              {[
-                { from: 72, to: 128 },
-                { from: 172, to: 228 },
-                { from: 272, to: 328 },
-                { from: 372, to: 428 },
-                { from: 472, to: 528 },
-                { from: 572, to: 628 }
-              ].map((conn, cIdx) => (
-                <g key={cIdx}>
-                  <line x1={conn.from} y1="22" x2={conn.to} y2="22" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" strokeDasharray="3 3" />
-                  <polygon points={`${conn.to},22 ${conn.to-5},19 ${conn.to-5},25`} fill="rgba(255,255,255,0.3)" />
-                </g>
-              ))}
-
-              {/* Steps */}
-              {[
-                { x: 50, name: 'Research', icon: (
-                  <g>
-                    <circle cx="50" cy="22" r="6" fill="none" stroke="#3B82F6" strokeWidth="1.5" />
-                    <line x1="54" y1="26" x2="59" y2="31" stroke="#3B82F6" strokeWidth="1.5" />
-                  </g>
-                )},
-                { x: 150, name: 'Match', icon: (
-                  <g>
-                    <circle cx="145" cy="22" r="2.5" fill="#06B6D4" />
-                    <circle cx="155" cy="17" r="2.5" fill="#06B6D4" />
-                    <circle cx="155" cy="27" r="2.5" fill="#06B6D4" />
-                    <path d="M147.5,22 L152.5,17 M147.5,22 L152.5,27" stroke="#06B6D4" strokeWidth="1.5" />
-                  </g>
-                )},
-                { x: 250, name: 'Validate', icon: (
-                  <g>
-                    <circle cx="250" cy="22" r="8" fill="none" stroke="#10B981" strokeWidth="1.5" />
-                    <path d="M247,22 L249,24 L253,19" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </g>
-                )},
-                { x: 350, name: 'Enrich', icon: (
-                  <g>
-                    <ellipse cx="350" cy="17" rx="6" ry="2.5" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
-                    <path d="M344,17 v4.5 c0 1.2 2.7 2.5 6 2.5 s6 -1.3 6 -2.5 v-4.5" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
-                    <path d="M344,21.5 v4.5 c0 1.2 2.7 2.5 6 2.5 s6 -1.3 6 -2.5 v-4.5" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
-                  </g>
-                )},
-                { x: 450, name: 'Evidence', icon: (
-                  <g>
-                    <path d="M445,15 h4 l2.5,2.5 h7.5 v11 h-14 Z" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeLinejoin="round" />
-                    <line x1="448" y1="21" x2="456" y2="21" stroke="#8B5CF6" strokeWidth="1" />
-                    <line x1="448" y1="24" x2="454" y2="24" stroke="#8B5CF6" strokeWidth="1" />
-                  </g>
-                )},
-                { x: 550, name: 'Rules', icon: (
-                  <g>
-                    <rect x="544" y="14" width="12" height="15" rx="1.5" fill="none" stroke="#EC4899" strokeWidth="1.5" />
-                    <line x1="548" y1="18" x2="552" y2="18" stroke="#EC4899" strokeWidth="1.5" />
-                    <line x1="548" y1="21" x2="552" y2="21" stroke="#EC4899" strokeWidth="1.5" />
-                    <line x1="548" y1="24" x2="552" y2="24" stroke="#EC4899" strokeWidth="1.5" />
-                  </g>
-                )},
-                { x: 650, name: 'COT', icon: (
-                  <g>
-                    <path d="M644,17 L649,12 h6 v6 L648,25 Z" fill="none" stroke="#10B981" strokeWidth="1.5" strokeLinejoin="round" />
-                    <circle cx="651" cy="15" r="1.2" fill="#10B981" />
-                  </g>
-                )}
-              ].map((step, sIdx) => (
-                <g key={sIdx}>
-                  {/* Step Icon Container Circle */}
-                  <circle cx={step.x} cy="22" r="16" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
-                  {step.icon}
-                  {/* Step Name */}
-                  <text x={step.x} y="54" fill="var(--text-secondary)" fontSize="9" fontWeight="600" textAnchor="middle">{step.name}</text>
-                </g>
-              ))}
-            </svg>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Row 2: Research Across Multiple Data Sources */}
-      <div style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.01)',
-        border: '1px solid var(--border-color)',
-        borderRadius: '16px',
-        padding: '24px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px'
-      }}>
-        <h4 style={{ fontSize: '0.85rem', color: '#8B5CF6', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-          Research Across Multiple Data Sources
-        </h4>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: '12px', width: '100%', justifyContent: 'space-between', overflowX: 'auto', paddingBottom: '4px' }}>
-          {sources.map((source, idx) => (
-            <div key={idx} style={{
-              backgroundColor: 'rgba(255,255,255,0.02)',
-              border: '1px solid var(--border-color)',
-              borderRadius: '10px',
-              padding: '12px 8px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '6px',
-              flex: 1,
-              minWidth: '90px'
-            }}>
-              <div style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '6px',
-                backgroundColor: `${source.color}15`,
-                border: `1px solid ${source.color}40`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '0.85rem',
-                fontWeight: 800,
-                color: source.color,
-                overflow: 'hidden'
-              }}>
-                {sourceImageErrors[source.id] ? (
-                  source.textIcon
-                ) : (
-                  <img
-                    src={`/images/sources/${source.id}.png`}
-                    onError={() => setSourceImageErrors(prev => ({ ...prev, [source.id]: true }))}
-                    alt={source.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                  />
-                )}
-              </div>
-              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-primary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%', overflow: 'hidden' }}>
-                {source.name}
-              </div>
-              <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', width: '100%', overflow: 'hidden' }}>
-                {source.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Row 3: How 340B Check Works & End-to-End Workflow */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
-
-        {/* How 340B Check Works */}
-        <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.01)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px'
-        }}>
-          <h4 style={{ fontSize: '0.85rem', color: '#3B82F6', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            How 340B Check Works
-          </h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              'Extract / identify customer using DEA, HIN, NPI identifiers',
-              'Navigate HRSA 340B database using Selenium browser automation',
-              'Search and retrieve 340B ID / Covered Entity details',
-              'Determine eligibility category and Active/Inactive status',
-              'Capture and store screenshot evidence for compliance checks'
-            ].map((step, idx) => (
-              <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                <span style={{
-                  width: '18px',
-                  height: '18px',
-                  borderRadius: '50%',
-                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                  color: '#3B82F6',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  marginTop: '2px'
-                }}>
-                  {idx + 1}
-                </span>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
-                  {step}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* 340B Lookup Result subcard */}
-          <div style={{
-            backgroundColor: 'rgba(0,0,0,0.2)',
-            border: '1px solid rgba(59,130,246,0.15)',
-            borderRadius: '12px',
-            padding: '16px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px'
-          }}>
-            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '6px' }}>
-              340B Lookup Result
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: '8px', fontSize: '0.75rem' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>340B ID:</span>
-              <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{selectedLookup.id}</span>
-
-              <span style={{ color: 'var(--text-secondary)' }}>Entity Name:</span>
-              <span style={{ fontWeight: 600, color: '#10B981' }}>{selectedLookup.name}</span>
-
-              <span style={{ color: 'var(--text-secondary)' }}>Status:</span>
-              <span><span style={{ backgroundColor: 'rgba(16,185,129,0.15)', color: '#10B981', padding: '2px 6px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: 700 }}>ACTIVE</span></span>
-
-              <span style={{ color: 'var(--text-secondary)' }}>Category:</span>
-              <span style={{ color: 'var(--text-primary)' }}>{selectedLookup.category}</span>
-
-              <span style={{ color: 'var(--text-secondary)' }}>Address:</span>
-              <span style={{ color: 'var(--text-secondary)' }}>{selectedLookup.address}</span>
-            </div>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              backgroundColor: 'rgba(16,185,129,0.06)',
-              border: '1px solid rgba(16,185,129,0.2)',
-              borderRadius: '6px',
-              padding: '6px',
-              fontSize: '0.75rem',
-              color: '#10B981',
-              fontWeight: 600,
-              marginTop: '4px'
-            }}>
-              <CheckCircle2 size={12} />
-              Evidence Captured &amp; Archived
-            </div>
-          </div>
-        </div>
-
-        {/* End-to-End Workflow */}
-        <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.01)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px'
-        }}>
-          <h4 style={{ fontSize: '0.85rem', color: '#10B981', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            End-to-End Workflow
-          </h4>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              { num: '1', title: 'Input / Trigger', desc: 'Customer ID, DEA, HIN, Name, Address', color: '#3B82F6', icon: <Users size={12} /> },
-              { num: '2', title: 'Automated Research', desc: 'Python + Selenium search directories', color: '#F59E0B', icon: <Terminal size={12} /> },
-              { num: '3', title: 'Match & Validate', desc: 'Reconcile entities & cross-check key fields', color: '#10B981', icon: <Layers size={12} /> },
-              { num: '4', title: 'Evidence Collection', desc: 'Capture screenshots and generate compliance log', color: '#8B5CF6', icon: <Camera size={12} /> },
-              { num: '5', title: 'Business Rules & COT', desc: 'Apply rules to recommend final Class of Trade', color: '#EC4899', icon: <Tag size={12} /> }
-            ].map((flow, idx) => (
-              <div key={idx} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                backgroundColor: 'rgba(255,255,255,0.02)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '10px',
-                padding: '10px 14px'
-              }}>
-                <div style={{
-                  width: '24px',
-                  height: '24px',
-                  borderRadius: '50%',
-                  backgroundColor: flow.color,
-                  color: '#000000',
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0
-                }}>
-                  {flow.num}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-primary)' }}>{flow.title}</span>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>{flow.desc}</span>
-                </div>
-                <div style={{ color: flow.color, opacity: 0.8 }}>
-                  {flow.icon}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            backgroundColor: 'rgba(255,255,255,0.02)',
-            border: '1px dashed var(--border-color)',
-            borderRadius: '8px',
-            padding: '10px',
-            fontSize: '0.75rem',
-            color: 'var(--text-secondary)'
-          }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#F59E0B' }} />
-            <span><strong>Human Review &amp; Approval:</strong> Analyst evaluates match criteria &amp; confirms or overrides COT.</span>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Row 4: PowerApps Dashboard Mockup (Main Feature) */}
-      <div>
-        <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-          <Settings size={14} style={{ color: '#8B5CF6' }} />
-          Microsoft PowerApps Interactive Portal
-        </h4>
-
-        {/* PowerApps Mockup Window */}
-        <div style={{
-          backgroundColor: '#0A0B14',
-          border: '1px solid rgba(139, 92, 246, 0.2)',
-          borderRadius: '12px',
-          overflow: 'hidden',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6)'
-        }}>
-          {/* Header Bar */}
-          <div style={{
-            backgroundColor: '#501650', // PowerApps deep purple/plum
-            height: '48px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '0 16px',
-            borderBottom: '1px solid rgba(255,255,255,0.08)'
-          }}>
-            {/* Left side */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{
-                width: '18px',
-                height: '18px',
-                backgroundColor: '#FFFFFF',
-                borderRadius: '3px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 900,
-                fontSize: '0.65rem',
-                color: '#501650'
-              }}>
-                P
-              </div>
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFFFFF' }}>PowerApps</span>
-              <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem' }}>|</span>
-              <span style={{ fontSize: '0.8rem', color: '#E9D6E9', fontWeight: 600 }}>Customer Research Tool (CRT)</span>
-            </div>
-
-            {/* Middle: Search input box */}
-            <div style={{ flex: 0.5, display: 'flex', alignItems: 'center', position: 'relative' }}>
-              <Search size={14} style={{ position: 'absolute', left: '10px', color: '#C8B0C8' }} />
-              <input
-                type="text"
-                placeholder="Search by Customer Name, Address, DEA, HIN, NPI, 340B ID..."
-                readOnly
-                style={{
-                  width: '100%',
-                  backgroundColor: 'rgba(255,255,255,0.12)',
-                  border: 'none',
-                  borderRadius: '4px',
-                  padding: '6px 12px 6px 32px',
-                  fontSize: '0.75rem',
-                  color: '#FFFFFF',
-                  outline: 'none'
-                }}
-              />
-            </div>
-
-            {/* Right side */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', color: '#E9D6E9' }}>
-              <Plus size={16} style={{ cursor: 'pointer' }} />
-              <span style={{ cursor: 'pointer', fontSize: '1rem' }}>🔔</span>
-              <span style={{ cursor: 'pointer', fontSize: '0.9rem' }}>❓</span>
-              <div style={{
-                width: '28px',
-                height: '28px',
-                borderRadius: '50%',
-                backgroundColor: '#9c27b0',
-                color: '#FFFFFF',
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: '1px solid rgba(255,255,255,0.2)'
-              }}>
-                NM
-              </div>
-            </div>
-          </div>
-
-          {/* Sub Workspace split */}
-          <div style={{ display: 'flex', minHeight: '480px' }}>
-
-            {/* Left Sidebar */}
-            <div style={{
-              width: '160px',
-              backgroundColor: '#111222',
-              borderRight: '1px solid rgba(255,255,255,0.03)',
-              padding: '16px 8px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              flexShrink: 0
-            }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {[
-                  { name: 'Home', icon: '🏠', active: true },
-                  { name: 'Dashboard', icon: '📊', active: false },
-                  { name: 'Search', icon: '🔍', active: false },
-                  { name: 'Research', icon: '🔬', active: false },
-                  { name: 'Customers', icon: '👥', active: false },
-                  { name: 'Evidence', icon: '📁', active: false },
-                  { name: 'Reports', icon: '📈', active: false },
-                  { name: 'Admin', icon: '⚙️', active: false }
-                ].map((item, idx) => (
-                  <div key={idx} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '8px 12px',
-                    borderRadius: '6px',
-                    backgroundColor: item.active ? 'rgba(116, 39, 116, 0.15)' : 'transparent',
-                    color: item.active ? '#EC4899' : '#94A3B8',
-                    fontSize: '0.75rem',
-                    fontWeight: item.active ? 700 : 500,
-                    cursor: 'pointer'
-                  }}>
-                    <span>{item.icon}</span>
-                    <span>{item.name}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div style={{ padding: '0 8px', fontSize: '0.65rem', color: '#475569' }}>
-                <div>CRT v2.4.1</div>
-                <div style={{ marginTop: '2px' }}>© 2025 All rights</div>
-              </div>
-            </div>
-
-            {/* Main Content Workspace Panel */}
-            <div style={{ flex: 1, backgroundColor: '#0E0F1A', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', overflowX: 'auto' }}>
-
-              {/* Workspace Grid Row 1 (4 Cards) */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
-
-                {/* 1. Customer Profile */}
-                <div style={{ backgroundColor: '#161726', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#EC4899', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    👤 Customer Profile
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FFFFFF' }}>{selectedLookup.name}</span>
-                    <span style={{ fontSize: '0.7rem', color: '#94A3B8', marginTop: '2px', lineHeight: 1.3 }}>{selectedLookup.address}</span>
-                  </div>
-                  <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '6px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.65rem', color: '#94A3B8' }}>
-                    <div>DEA: <span style={{ color: '#FFFFFF' }}>5678985678</span></div>
-                    <div>HIN: <span style={{ color: '#FFFFFF' }}>1234567890</span></div>
-                    <div>NPI: <span style={{ color: '#FFFFFF' }}>1234567890</span></div>
-                    <div>340B: <span style={{ color: '#FFFFFF' }}>{selectedLookup.id}</span></div>
-                  </div>
-                  <span style={{ fontSize: '0.7rem', color: '#3B82F6', fontWeight: 600, marginTop: 'auto', display: 'inline-block' }}>View Full Profile →</span>
-                </div>
-
-                {/* 2. Source Validation */}
-                <div style={{ backgroundColor: '#161726', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#10B981', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    ✔️ Source Validation
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', fontSize: '0.65rem' }}>
-                    {[
-                      'DEA', 'HIBCC (HIN)', 'HRSA 340B', 'NPI Registry',
-                      'Google Search', 'MDM', 'Excel Files', 'Other Sources'
-                    ].map((src, i) => (
-                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#94A3B8' }}>
-                        <span style={{ color: '#10B981' }}>●</span>
-                        <span>{src}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <span style={{ fontSize: '0.7rem', color: '#3B82F6', fontWeight: 600, marginTop: 'auto', display: 'inline-block' }}>View All Sources →</span>
-                </div>
-
-                {/* 3. Evidence */}
-                <div style={{ backgroundColor: '#161726', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#8B5CF6', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    📁 Evidence
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '4px', flex: 1, minHeight: '60px' }}>
-                    {[1, 2, 3, 4, 5, 6].map((ev) => (
-                      <div key={ev} style={{
-                        backgroundColor: '#1E2038',
-                        border: '1px solid rgba(255,255,255,0.05)',
-                        borderRadius: '3px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        padding: '4px'
-                      }}>
-                        <div style={{ width: '100%', height: '2px', backgroundColor: '#334155' }} />
-                        <div style={{ width: '80%', height: '2px', backgroundColor: '#334155' }} />
-                        <div style={{ width: '60%', height: '2px', backgroundColor: '#334155' }} />
-                      </div>
-                    ))}
-                  </div>
-                  <span style={{ fontSize: '0.7rem', color: '#3B82F6', fontWeight: 600, marginTop: '6px', display: 'inline-block' }}>View All Evidence →</span>
-                </div>
-
-                {/* 4. COT Classification */}
-                <div style={{ backgroundColor: '#161726', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#F59E0B', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    🏷️ COT Classification
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                    <span style={{ fontSize: '0.65rem', color: '#94A3B8' }}>Recommended COT:</span>
-                    <span style={{ fontSize: '1rem', fontWeight: 800, color: '#FFFFFF' }}>Hospital</span>
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: '#94A3B8' }}>
-                    <div>Confidence: <span style={{ color: '#10B981', fontWeight: 700 }}>92%</span></div>
-                    <div>Matched: <span style={{ color: '#FFFFFF', fontWeight: 700 }}>24/24</span></div>
-                  </div>
-                  <div style={{
-                    backgroundColor: 'rgba(16,185,129,0.15)',
-                    border: '1px solid rgba(16,185,129,0.3)',
-                    color: '#10B981',
-                    borderRadius: '4px',
-                    padding: '4px',
-                    fontSize: '0.7rem',
-                    fontWeight: 700,
-                    textAlign: 'center',
-                    marginTop: 'auto'
-                  }}>
-                    Approved
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Workspace Grid Row 2 (Research Summary Graph & Recent Research Table) */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '12px' }}>
-
-                {/* Research Summary Area Chart */}
-                <div style={{ backgroundColor: '#161726', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FFFFFF' }}>Research Summary</span>
-                    <span style={{ fontSize: '0.65rem', color: '#94A3B8', backgroundColor: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: '4px' }}>Last 7 Days ▾</span>
-                  </div>
-
-                  {/* Stats line */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '8px' }}>
-                    <div>
-                      <div style={{ fontSize: '0.6rem', color: '#94A3B8' }}>Total Research</div>
-                      <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FFFFFF' }}>128 <span style={{ fontSize: '0.65rem', color: '#10B981', fontWeight: 500 }}>↑ 18%</span></div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.6rem', color: '#94A3B8' }}>Completed</div>
-                      <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FFFFFF' }}>96 <span style={{ fontSize: '0.65rem', color: '#10B981', fontWeight: 500 }}>↑ 20%</span></div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.6rem', color: '#94A3B8' }}>In Progress</div>
-                      <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FFFFFF' }}>18 <span style={{ fontSize: '0.65rem', color: '#EF4444', fontWeight: 500 }}>↓ 5%</span></div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.6rem', color: '#94A3B8' }}>Exceptions</div>
-                      <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FFFFFF' }}>14 <span style={{ fontSize: '0.65rem', color: '#EF4444', fontWeight: 500 }}>↓ 12%</span></div>
-                    </div>
-                  </div>
-
-                  {/* Sparkline Graph */}
-                  <div style={{ flex: 1, minHeight: '90px', position: 'relative' }}>
-                    <svg viewBox="0 0 300 90" style={{ width: '100%', height: '100%', overflow: 'hidden' }}>
-                      <defs>
-                        <linearGradient id="purpleAreaGradCrt" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#EC4899" stopOpacity="0.4" />
-                          <stop offset="100%" stopColor="#EC4899" stopOpacity="0.0" />
-                        </linearGradient>
-                      </defs>
-                      {/* Grid Lines */}
-                      <line x1="15" y1="15" x2="285" y2="15" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-                      <line x1="15" y1="35" x2="285" y2="35" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-                      <line x1="15" y1="55" x2="285" y2="55" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-                      <line x1="15" y1="75" x2="285" y2="75" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-
-                      {/* Area Path */}
-                      <path d="M15,70 L60,60 L105,50 L150,55 L195,35 L240,65 L285,20 L285,75 L15,75 Z" fill="url(#purpleAreaGradCrt)" />
-                      {/* Line Path */}
-                      <path d="M15,70 L60,60 L105,50 L150,55 L195,35 L240,65 L285,20" fill="none" stroke="#EC4899" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      
-                      {/* Points */}
-                      <circle cx="15" cy="70" r="3" fill="#EC4899" />
-                      <circle cx="60" cy="60" r="3" fill="#EC4899" />
-                      <circle cx="105" cy="50" r="3" fill="#EC4899" />
-                      <circle cx="150" cy="55" r="3" fill="#EC4899" />
-                      <circle cx="195" cy="35" r="3" fill="#EC4899" />
-                      <circle cx="240" cy="65" r="3" fill="#EC4899" />
-                      <circle cx="285" cy="20" r="3" fill="#EC4899" />
-
-                      {/* Labels */}
-                      <text x="15" y="86" fill="#475569" fontSize="7" textAnchor="middle">May 05</text>
-                      <text x="60" y="86" fill="#475569" fontSize="7" textAnchor="middle">May 06</text>
-                      <text x="105" y="86" fill="#475569" fontSize="7" textAnchor="middle">May 07</text>
-                      <text x="150" y="86" fill="#475569" fontSize="7" textAnchor="middle">May 08</text>
-                      <text x="195" y="86" fill="#475569" fontSize="7" textAnchor="middle">May 09</text>
-                      <text x="240" y="86" fill="#475569" fontSize="7" textAnchor="middle">May 10</text>
-                      <text x="285" y="86" fill="#475569" fontSize="7" textAnchor="middle">May 11</text>
-                    </svg>
-                  </div>
-                </div>
-
-                {/* Recent Research Table */}
-                <div style={{ backgroundColor: '#161726', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#FFFFFF' }}>Recent Research</span>
-                    <span style={{ fontSize: '0.75rem', color: '#3B82F6', fontWeight: 600 }}>Recent Research</span>
-                  </div>
-
-                  {/* Table */}
-                  <div style={{ flex: 1, overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.65rem', textAlign: 'left' }}>
-                      <thead>
-                        <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', color: '#64748B' }}>
-                          <th style={{ padding: '6px 4px' }}>Customer</th>
-                          <th style={{ padding: '6px 4px' }}>Research ID</th>
-                          <th style={{ padding: '6px 4px' }}>Status</th>
-                          <th style={{ padding: '6px 4px' }}>COT</th>
-                          <th style={{ padding: '6px 4px' }}>Updated</th>
-                        </tr>
-                      </thead>
-                      <tbody style={{ color: '#94A3B8' }}>
-                        {[
-                          { name: 'ABC Health Center', id: 'CRT-2024-000567', status: 'Completed', color: '#10B981', cot: 'Hospital', date: 'May 11, 2025' },
-                          { name: 'XYZ Pharmacy', id: 'CRT-2024-000566', status: 'Completed', color: '#10B981', cot: 'Retail Pharm.', date: 'May 11, 2025' },
-                          { name: 'HealthPlus Clinic', id: 'CRT-2024-000565', status: 'In Progress', color: '#3B82F6', cot: 'Clinic', date: 'May 11, 2025' },
-                          { name: 'Wellness Hospital', id: 'CRT-2024-000564', status: 'Completed', color: '#10B981', cot: 'Hospital', date: 'May 10, 2025' },
-                          { name: 'CarePoint LTC', id: 'CRT-2024-000563', status: 'Exception', color: '#EF4444', cot: 'LTC Facility', date: 'May 10, 2025' }
-                        ].map((row, i) => (
-                          <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.02)', cursor: 'pointer', backgroundColor: selectedLookup.name === row.name ? 'rgba(255,255,255,0.02)' : 'transparent' }} onClick={() => setSelectedLookup({
-                            id: row.id.split('-')[2],
-                            name: row.name,
-                            status: row.status,
-                            category: row.cot,
-                            address: row.name === 'ABC Health Center' ? '123 Main St, Springfield, IL 62701, USA' : row.name === 'XYZ Pharmacy' ? '456 Retail Blvd, Chicago, IL 60611, USA' : row.name === 'HealthPlus Clinic' ? '789 Medical Dr, Peoria, IL 61602, USA' : row.name === 'Wellness Hospital' ? '101 Wellness Ave, Rockford, IL 61101, USA' : '202 Care Rd, Decatur, IL 62521, USA'
-                          })}>
-                            <td style={{ padding: '6px 4px', fontWeight: 600, color: '#FFFFFF' }}>{row.name}</td>
-                            <td style={{ padding: '6px 4px', fontFamily: 'monospace' }}>{row.id}</td>
-                            <td style={{ padding: '6px 4px' }}>
-                              <span style={{
-                                display: 'inline-block',
-                                padding: '1px 5px',
-                                borderRadius: '3px',
-                                backgroundColor: `${row.color}15`,
-                                color: row.color,
-                                fontSize: '0.6rem',
-                                fontWeight: 700
-                              }}>
-                                {row.status}
-                              </span>
-                            </td>
-                            <td style={{ padding: '6px 4px' }}>{row.cot}</td>
-                            <td style={{ padding: '6px 4px' }}>{row.date}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Bottom Quick Actions Bar */}
-              <div style={{
-                backgroundColor: '#161726',
-                border: '1px solid rgba(255,255,255,0.03)',
-                borderRadius: '8px',
-                padding: '8px 12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '8px'
-              }}>
-                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94A3B8' }}>Quick Actions:</span>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {[
-                    { name: 'New Research', icon: '➕' },
-                    { name: 'Search Customer', icon: '🔍' },
-                    { name: 'Upload Excel', icon: '📁' },
-                    { name: 'View Evidence', icon: '📄' },
-                    { name: 'Generate Report', icon: '📊' },
-                    { name: 'Manage Rules', icon: '⚙️' }
-                  ].map((act, i) => (
-                    <button key={i} style={{
-                      backgroundColor: 'rgba(255,255,255,0.03)',
-                      border: '1px solid rgba(255,255,255,0.05)',
-                      borderRadius: '4px',
-                      padding: '4px 8px',
-                      fontSize: '0.65rem',
-                      color: '#FFFFFF',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}>
-                      <span>{act.icon}</span>
-                      <span>{act.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      {/* Row 5: Multi-Client Architecture & Business Impact */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
-
-        {/* Multi-Client Architecture (Mini details) */}
-        <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.01)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
-          <h4 style={{ fontSize: '0.85rem', color: '#8B5CF6', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            Multi-Client Architecture
-          </h4>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.5, margin: 0 }}>
-            CRT is engineered as a core runtime engine that coordinates data extraction, matching, evidence compilation, and rule execution. It dynamically loads client-specific schemas (Pfizer, AbbVie, Amgen) to execute custom validations.
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-            <div style={{ borderLeft: '2px solid #8B5CF6', paddingLeft: '12px' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-primary)' }}>Core Pipeline Engine</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Uniform data collection &amp; processing pipelines.</div>
-            </div>
-            <div style={{ borderLeft: '2px solid #10B981', paddingLeft: '12px' }}>
-              <div style={{ fontWeight: 700, fontSize: '0.8rem', color: 'var(--text-primary)' }}>Client Configuration Layer</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Isolates rulesets, credentials, and custom directory sources per client.</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Business Impact Grid */}
-        <div style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.01)',
-          border: '1px solid var(--border-color)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
-          <h4 style={{ fontSize: '0.9rem', color: '#10B981', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            <TrendingUp size={16} />
-            Business Impact Delivered
-          </h4>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            {[
-              { val: '70%+', label: 'Reduction in research time' },
-              { val: '60%+', label: 'Reduction in manual effort' },
-              { val: '3X+', label: 'Increase in research throughput' },
-              { val: '90%+', label: 'Improved data accuracy' }
-            ].map((impact, idx) => (
-              <div key={idx} style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                border: '1px solid var(--border-color)',
-                borderRadius: '8px',
-                padding: '10px',
-                textAlign: 'center'
-              }}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#10B981' }}>{impact.val}</div>
-                <div style={{ fontSize: '0.65rem', color: 'var(--text-secondary)', marginTop: '2px', lineHeight: 1.2 }}>{impact.label}</div>
-              </div>
-            ))}
-          </div>
-          <ul style={{ paddingLeft: '16px', margin: 0, display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-            <li>Improved COT assignment accuracy preventing downstream billing disputes.</li>
-            <li>Faster customer onboarding and prompt issues resolution.</li>
-            <li>Drastically reduced chargeback failures from master database mismatches.</li>
-            <li>Reusable platform architecture deployed across multiple global pharma accounts.</li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-  );
-}
-
-function MaciCustomDashboard() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', width: '100%' }}>
-      {/* Row 1: Problem & Solution Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-        {/* The Problem Card */}
-        <div style={{
-          backgroundColor: 'rgba(239, 68, 68, 0.02)',
-          border: '1px solid rgba(239, 68, 68, 0.15)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
-          <h4 style={{ fontSize: '0.9rem', color: '#EF4444', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            <ShieldAlert size={16} />
-            The Problem
-          </h4>
-          <p className="body-normal" style={{ fontSize: '0.9rem', lineHeight: 1.5, color: 'var(--text-secondary)' }}>
-            Traditional STEM (Sales Training Effectiveness & Management) and coaching framework suffered from low coverage, high cost, and long delays:
-          </p>
-          <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: 0, listStyle: 'none' }}>
-            {[
-              'Slow feedback cycle (~3 months)',
-              'High manual effort & cost',
-              'Low coverage (<1% sample size)',
-              'No real-time insights',
-              'Inconsistent & subjective assessments'
-            ].map((err, idx) => (
-              <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                <XCircle size={14} style={{ color: '#EF4444', flexShrink: 0 }} />
-                <span>{err}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* The Solution Card */}
-        <div style={{
-          backgroundColor: 'rgba(34, 197, 94, 0.02)',
-          border: '1px solid rgba(34, 197, 94, 0.15)',
-          borderRadius: '16px',
-          padding: '24px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px'
-        }}>
-          <h4 style={{ fontSize: '0.9rem', color: '#22C55E', display: 'flex', alignItems: 'center', gap: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0, fontWeight: 700 }}>
-            <Lightbulb size={16} />
-            The Solution
-          </h4>
-          <p className="body-normal" style={{ fontSize: '0.9rem', lineHeight: 1.5, color: 'var(--text-secondary)' }}>
-            MACI automates the end-to-end evaluation pipeline - from audio ingestion to AI-based scoring and automated coaching insights:
-          </p>
-
-          {/* 7-Step Solution Pipeline Icons */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginTop: 'auto' }}>
-            {[
-              { label: 'Ingest', icon: Database },
-              { label: 'Convert', icon: RefreshCw },
-              { label: 'Transcribe', icon: Volume2 },
-              { label: 'Analyze', icon: Search },
-              { label: 'Score', icon: BarChart3 },
-              { label: 'Report', icon: Terminal },
-              { label: 'Improve', icon: TrendingUp }
-            ].map((step, idx) => {
-              const StepIcon = step.icon;
-              return (
-                <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flex: 1, minWidth: '45px' }}>
-                  <div style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    backgroundColor: 'rgba(34, 197, 94, 0.05)',
-                    border: '1px solid rgba(34, 197, 94, 0.2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#22C55E'
-                  }}>
-                    <StepIcon size={14} />
-                  </div>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textAlign: 'center' }}>{step.label}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-
-
-      {/* Row 3: Interactive Dashboards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
-
-        {/* Left Side: MACI WEB DASHBOARD */}
-        <div className="glass-panel" style={{
-          padding: '24px',
-          background: 'rgba(9, 7, 20, 0.7)',
-          border: '1px solid rgba(139, 92, 246, 0.15)',
-          borderRadius: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
-        }}>
-          {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#8B5CF6' }}></div>
-              <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#A78BFA', letterSpacing: '0.05em' }}>MACI WEB DASHBOARD</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
-              <Clock size={10} />
-              <span>May 01 - May 22, 2024</span>
-              <Filter size={10} style={{ marginLeft: '4px', cursor: 'pointer' }} />
-            </div>
-          </div>
-
-          {/* Mini Stats Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
-            {[
-              { val: '1,248', label: 'Total Calls', trend: '+15%' },
-              { val: '92/100', label: 'Avg Value', trend: '+10%' },
-              { val: '76%', label: 'Msg Delivery', trend: '+5%' },
-              { val: '66%', label: 'Rep Perf.', trend: '+8%' }
-            ].map((stat, idx) => (
-              <div key={idx} style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                border: '1px solid rgba(255,255,255,0.03)',
-                borderRadius: '8px',
-                padding: '8px',
-                textAlign: 'center'
-              }}>
-                <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)' }}>{stat.val}</div>
-                <div style={{ fontSize: '0.6rem', color: 'var(--text-secondary)', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden' }}>{stat.label}</div>
-                <div style={{ fontSize: '0.55rem', color: '#10B981', fontWeight: 600, marginTop: '2px' }}>{stat.trend}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Donut and Line Chart Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '12px', alignItems: 'center' }}>
-
-            {/* Call Value Optimization Donut */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600 }}>Call Value Split</span>
-              <div style={{ position: 'relative', width: '80px', height: '80px' }}>
-                <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
-                  {/* Red (Low) */}
-                  <circle cx="18" cy="18" r="15.91" fill="none" stroke="#EF4444" strokeWidth="3" strokeDasharray="50 100" strokeDashoffset="0" />
-                  {/* Yellow (Medium) */}
-                  <circle cx="18" cy="18" r="15.91" fill="none" stroke="#F59E0B" strokeWidth="3" strokeDasharray="22 100" strokeDashoffset="-50" />
-                  {/* Green (High) */}
-                  <circle cx="18" cy="18" r="15.91" fill="none" stroke="#22C55E" strokeWidth="3" strokeDasharray="28 100" strokeDashoffset="-72" />
-                </svg>
-                <div style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center'
-                }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--text-primary)' }}>1,248</span>
-                  <span style={{ fontSize: '0.45rem', color: 'var(--text-secondary)' }}>Calls</span>
-                </div>
-              </div>
-
-              {/* Legend */}
-              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '6px', fontSize: '0.55rem' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#22C55E' }}>● High</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#F59E0B' }}>● Med</span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#EF4444' }}>● Low</span>
-              </div>
-            </div>
-
-            {/* Trend Chart */}
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '8px', fontWeight: 600, textAlign: 'left' }}>Trend Over Time</span>
-              <svg viewBox="0 0 140 70" style={{ width: '100%', height: '70px', overflow: 'visible' }}>
-                {/* Grid Lines */}
-                <line x1="0" y1="10" x2="140" y2="10" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-                <line x1="0" y1="35" x2="140" y2="35" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-                <line x1="0" y1="60" x2="140" y2="60" stroke="rgba(255,255,255,0.03)" strokeWidth="0.5" />
-
-                {/* Trend Lines */}
-                {/* Line 1 (Goal Score - Purple) */}
-                <path d="M 0 50 Q 30 20 60 40 T 120 15 T 140 25" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeLinecap="round" />
-                {/* Line 2 (Message Delivery - Green) */}
-                <path d="M 0 55 Q 35 45 70 30 T 110 40 T 140 20" fill="none" stroke="#10B981" strokeWidth="1.2" strokeLinecap="round" strokeDasharray="2 2" />
-
-                {/* X Axis labels */}
-                <text x="5" y="68" fill="#64748B" fontSize="5">May 12</text>
-                <text x="70" y="68" fill="#64748B" fontSize="5" textAnchor="middle">May 16</text>
-                <text x="135" y="68" fill="#64748B" fontSize="5" textAnchor="end">May 21</text>
-              </svg>
-            </div>
-
-          </div>
-
-          {/* Table */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 600, textAlign: 'left' }}>Recent Call Analysis</span>
-            <div style={{ overflowX: 'auto', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '8px' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.65rem', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Call ID</th>
-                    <th style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>Rep</th>
-                    <th style={{ padding: '6px 8px', color: 'var(--text-secondary)', textAlign: 'center' }}>Score</th>
-                    <th style={{ padding: '6px 8px', color: 'var(--text-secondary)', textAlign: 'center' }}>Sentiment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { id: '...2228', rep: 'rep_0311', score: 92, sent: 'Positive', sColor: '#22C55E', sBg: 'rgba(34, 197, 94, 0.1)' },
-                    { id: '...3001', rep: 'rep_0371', score: 54, sent: 'Neutral', sColor: '#F59E0B', sBg: 'rgba(245, 158, 11, 0.1)' },
-                    { id: '...2007', rep: 'rep_1274', score: 32, sent: 'Negative', sColor: '#EF4444', sBg: 'rgba(239, 68, 68, 0.1)' },
-                    { id: '...2225', rep: 'rep_0531', score: 68, sent: 'Neutral', sColor: '#F59E0B', sBg: 'rgba(245, 158, 11, 0.1)' }
-                  ].map((row, idx) => (
-                    <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)', background: idx % 2 === 0 ? 'rgba(255,255,255,0.01)' : 'transparent' }}>
-                      <td style={{ padding: '6px 8px', fontFamily: 'monospace' }}>{row.id}</td>
-                      <td style={{ padding: '6px 8px', color: 'var(--text-secondary)' }}>{row.rep}</td>
-                      <td style={{ padding: '6px 8px', fontWeight: 600, color: row.score >= 80 ? '#22C55E' : row.score >= 50 ? '#F59E0B' : '#EF4444', textAlign: 'center' }}>
-                        {row.score}
-                      </td>
-                      <td style={{ padding: '6px 8px', textAlign: 'center' }}>
-                        <span style={{
-                          padding: '2px 6px',
-                          borderRadius: '4px',
-                          fontSize: '0.55rem',
-                          fontWeight: 600,
-                          backgroundColor: row.sBg,
-                          color: row.sColor
-                        }}>{row.sent}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Right Side: EXAMPLE CALL ANALYSIS VIEW */}
-        <div className="glass-panel" style={{
-          padding: '24px',
-          background: 'rgba(9, 7, 20, 0.7)',
-          border: '1px solid rgba(139, 92, 246, 0.15)',
-          borderRadius: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
-        }}>
-          {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '12px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '0.6rem', color: 'var(--text-secondary)', fontWeight: 600, letterSpacing: '0.05em' }}>EXAMPLE CALL ANALYSIS VIEW</span>
-              <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>Call ID: ES-2024-03-1288</span>
-            </div>
-            <span style={{
-              padding: '4px 8px',
-              borderRadius: '6px',
-              backgroundColor: 'rgba(34, 197, 94, 0.1)',
-              color: '#22C55E',
-              fontSize: '0.65rem',
-              fontWeight: 700,
-              border: '1px solid rgba(34, 197, 94, 0.25)'
-            }}>
-              High Value Call
-            </span>
-          </div>
-
-          {/* Quick Metrics Bar */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '0.6rem', color: 'var(--text-secondary)' }}>Call Value Score</span>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#22C55E' }}>88</span>
-                <span style={{ fontSize: '0.65rem', color: 'var(--text-secondary)' }}>/ 100</span>
-              </div>
-              <div style={{ display: 'flex', gap: '1px', color: '#F59E0B' }}>
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={8} fill={i < 4 ? '#F59E0B' : 'none'} stroke="#F59E0B" />
-                ))}
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '0.6rem', color: 'var(--text-secondary)' }}>HCP Sentiment</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
-                <span style={{
-                  padding: '2px 6px',
-                  borderRadius: '4px',
-                  backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                  color: '#22C55E',
-                  fontSize: '0.65rem',
-                  fontWeight: 700
-                }}>Positive</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '0.55rem', color: 'var(--text-secondary)' }}>
-                <Activity size={8} style={{ color: '#22C55E' }} />
-                <span>Responsive</span>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '0.6rem', color: 'var(--text-secondary)' }}>Key Message Delivery</span>
-              <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '2px' }}>85%</span>
-              <div style={{ width: '100%', height: '4px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden' }}>
-                <div style={{ width: '85%', height: '100%', backgroundColor: '#8B5CF6' }}></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Share of Voice indicator */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6rem', color: 'var(--text-secondary)' }}>
-              <span>Rep: 62%</span>
-              <span>HCP: 38%</span>
-            </div>
-            <div style={{ width: '100%', height: '6px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden', display: 'flex' }}>
-              <div style={{ width: '62%', height: '100%', backgroundColor: '#3B82F6' }}></div>
-              <div style={{ width: '38%', height: '100%', backgroundColor: '#EC4899' }}></div>
-            </div>
-          </div>
-
-          {/* Checklist */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-primary)', fontWeight: 700 }}>Key Messages Verified</span>
-              <span style={{ fontSize: '0.7rem', color: '#10B981', fontWeight: 700 }}>6 / 7</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              {[
-                { text: 'Efficacy in reducing hospitalizations', ok: true },
-                { text: 'Dosing options & titration schedules', ok: true },
-                { text: 'Long-term safety profile & contraindications', ok: true },
-                { text: 'Dosing convenience for chronic care', ok: true },
-                { text: 'Comparative efficacy vs legacy treatments', ok: true },
-                { text: 'Patient adherence strategies & support', ok: true },
-                { text: 'Dosing adjustments in hepatic impairment', ok: false }
-              ].map((msg, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.65rem' }}>
-                  {msg.ok ? (
-                    <Check size={10} style={{ color: '#22C55E', flexShrink: 0 }} />
-                  ) : (
-                    <XCircle size={10} style={{ color: '#EF4444', flexShrink: 0 }} />
-                  )}
-                  <span style={{ color: msg.ok ? 'var(--text-secondary)' : '#FCA5A5' }}>{msg.text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Objections & Questions */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
-            {/* Objections */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.65rem', color: '#EC4899', fontWeight: 700 }}>Objections Identified</span>
-                <span style={{ fontSize: '0.65rem', color: '#EC4899', fontWeight: 700 }}>2</span>
-              </div>
-              <ul style={{ paddingLeft: '10px', margin: 0, fontSize: '0.6rem', color: 'var(--text-secondary)', listStyleType: 'disc' }}>
-                <li>Share of voice comparisons</li>
-                <li>Cost / Insurance Access</li>
-              </ul>
-            </div>
-
-            {/* Questions */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.65rem', color: '#3B82F6', fontWeight: 700 }}>Questions Raised</span>
-                <span style={{ fontSize: '0.65rem', color: '#3B82F6', fontWeight: 700 }}>3</span>
-              </div>
-              <ul style={{ paddingLeft: '10px', margin: 0, fontSize: '0.6rem', color: 'var(--text-secondary)', listStyleType: 'disc' }}>
-                <li>Onset of action timing?</li>
-                <li>Drug-drug interactions?</li>
-                <li>Real-world outcome evidence?</li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-
-    </div>
-  );
-}
+const getRgbValues = (hex: string) => {
+  if (hex === '#3B82F6') return '59, 130, 246';
+  if (hex === '#EC4899') return '236, 72, 153';
+  if (hex === '#6366F1') return '99, 102, 241';
+  if (hex === '#8B5CF6') return '139, 92, 246';
+  if (hex === '#10B981') return '16, 185, 129';
+  if (hex === '#F59E0B') return '245, 158, 11';
+  if (hex === '#06B6D4') return '6, 182, 212';
+  return '59, 130, 246';
+};
 
 interface FeaturedProjectsProps {
   viewMode: 'engineer' | 'consultant';
@@ -1314,6 +190,12 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
   const [slideIndex, setSlideIndex] = useState(0);
   const [consoleLogs, setConsoleLogs] = useState<string[]>([]);
   const [isCompiling, setIsCompiling] = useState(false);
+
+  // Interaction Upgrade States
+  const [prevOffset, setPrevOffset] = useState({ x: 0, y: 0 });
+  const [nextOffset, setNextOffset] = useState({ x: 0, y: 0 });
+  const [isPrevHovered, setIsPrevHovered] = useState(false);
+  const [isNextHovered, setIsNextHovered] = useState(false);
 
   const projects: CaseStudy[] = [
     {
@@ -1331,203 +213,606 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
       challenges: 'Handling schema mismatch across multi-market historical datasets. Resolved by writing a pre-processing AWS Glue integration to standardize pricing variables.',
       lessons: 'Designed and implemented a secure Claude Model Context Protocol (MCP) layer that translates natural language into validated SQL before executing governed queries against Amazon Redshift. MCP acts as a semantic gateway that understands business intent, generates parameterized SQL, validates against governance rules, executes queries securely, and returns accurate, auditable insights in seconds.',
       architecture: (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" style={{ width: '100%', height: 'auto', maxWidth: '1200px' }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1380 750" style={{ width: '100%', height: 'auto', maxWidth: '1380px', overflow: 'visible' }}>
           <defs>
-            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#090D16" />
-              <stop offset="100%" stopColor="#0F172A" />
+            <linearGradient id="bgGradBms" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#070814" />
+              <stop offset="100%" stopColor="#0e0f22" />
             </linearGradient>
-
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-            </filter>
 
             <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" fill="#475569">
               <polygon points="0 0, 8 3, 0 6" />
             </marker>
-            <marker id="arrowActive" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" fill="#3B82F6">
+            <marker id="arrowGreen" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" fill="#10b981">
+              <polygon points="0 0, 8 3, 0 6" />
+            </marker>
+            <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" fill="#3b82f6">
+              <polygon points="0 0, 8 3, 0 6" />
+            </marker>
+            <marker id="arrowRed" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" fill="#ef4444">
               <polygon points="0 0, 8 3, 0 6" />
             </marker>
           </defs>
 
           {/* Background */}
-          <rect width="1200" height="320" fill="url(#bgGrad)" rx="16" />
+          <rect width="1380" height="750" fill="url(#bgGradBms)" rx="16" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
 
-          {/* Subtle grid lines for consultant/enterprise aesthetic */}
-          <g stroke="#1E293B" strokeWidth="0.5" opacity="0.4">
-            <line x1="0" y1="80" x2="1200" y2="80" />
-            <line x1="0" y1="240" x2="1200" y2="240" />
-            <line x1="300" y1="0" x2="300" y2="320" />
-            <line x1="600" y1="0" x2="600" y2="320" />
-            <line x1="900" y1="0" x2="900" y2="320" />
-          </g>
+          {/* ==================== CONNECTORS ==================== */}
+          {/* Connector 1 -> 2 */}
+          <line x1="180" y1="320" x2="230" y2="320" stroke="#475569" strokeWidth="2" markerEnd="url(#arrow)" />
 
-          {/* ==================== FLOW CONNECTORS & PULSE PARTICLES ==================== */}
+          {/* Connector 2 -> 3 */}
+          <line x1="410" y1="320" x2="490" y2="320" stroke="#475569" strokeWidth="2" markerEnd="url(#arrow)" />
+          <foreignObject x="410" y="280" width="80" height="80">
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '14px', textAlign: 'center', pointerEvents: 'none' }}>
+              <span style={{ fontSize: '0.55rem', color: '#a78bfa', fontWeight: 700, lineHeight: 1.1 }}>Skill Trigger &amp; Flow</span>
+              <span style={{ fontSize: '0.55rem', color: '#3b82f6', fontWeight: 700, lineHeight: 1.1, display: 'flex', alignItems: 'center', gap: '2px' }}>🔒 MCP Tool</span>
+            </div>
+          </foreignObject>
 
-          {/* Connector 1 */}
-          <g transform="translate(185, 120)">
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#334155" strokeWidth="2" markerEnd="url(#arrow)" />
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#3B82F6" strokeWidth="2" strokeDasharray="10 35" markerEnd="url(#arrowActive)">
-              <animate attributeName="stroke-dashoffset" values="45;0" dur="2s" repeatCount="indefinite" />
-            </line>
-          </g>
+          {/* Connector 3 -> 4 */}
+          <line x1="670" y1="320" x2="730" y2="320" stroke="#475569" strokeWidth="2" markerEnd="url(#arrow)" />
+          <foreignObject x="670" y="290" width="60" height="30">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', pointerEvents: 'none' }}>
+              <span style={{ fontSize: '0.55rem', color: '#f97316', fontWeight: 700 }}>MCP API Call</span>
+            </div>
+          </foreignObject>
 
-          {/* Connector 2 */}
-          <g transform="translate(435, 120)">
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#334155" strokeWidth="2" markerEnd="url(#arrow)" />
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#8B5CF6" strokeWidth="2" strokeDasharray="10 35" markerEnd="url(#arrowActive)">
-              <animate attributeName="stroke-dashoffset" values="45;0" dur="2s" begin="0.5s" repeatCount="indefinite" />
-            </line>
-          </g>
+          {/* Connector 4 -> 5 */}
+          <line x1="940" y1="320" x2="980" y2="320" stroke="#475569" strokeWidth="2" markerEnd="url(#arrow)" />
 
-          {/* Connector 3 */}
-          <g transform="translate(685, 120)">
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#334155" strokeWidth="2" markerEnd="url(#arrow)" />
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#10B981" strokeWidth="2" strokeDasharray="10 35" markerEnd="url(#arrowActive)">
-              <animate attributeName="stroke-dashoffset" values="45;0" dur="2s" begin="1.0s" repeatCount="indefinite" />
-            </line>
-          </g>
+          {/* Connector 5 -> Output stack */}
+          <path d="M 1140 320 L 1155 320 L 1155 225 L 1170 225" stroke="#475569" strokeWidth="1.5" fill="none" markerEnd="url(#arrow)" />
+          <path d="M 1140 320 L 1170 320" stroke="#475569" strokeWidth="1.5" fill="none" markerEnd="url(#arrow)" />
+          <path d="M 1140 320 L 1155 320 L 1155 415 L 1170 415" stroke="#475569" strokeWidth="1.5" fill="none" markerEnd="url(#arrow)" />
 
-          {/* Connector 4 */}
-          <g transform="translate(935, 120)">
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#334155" strokeWidth="2" markerEnd="url(#arrow)" />
-            <line x1="0" y1="0" x2="45" y2="0" stroke="#06B6D4" strokeWidth="2" strokeDasharray="10 35" markerEnd="url(#arrowActive)">
-              <animate attributeName="stroke-dashoffset" values="45;0" dur="2s" begin="1.5s" repeatCount="indefinite" />
-            </line>
-          </g>
+          {/* ==================== FEEDBACK LOOPS ==================== */}
+          {/* Top Green Feedback Loop */}
+          <path d="M 1060 140 L 1060 115 L 100 115 L 100 140" stroke="#10b981" strokeWidth="1.5" strokeDasharray="3 3" fill="none" markerEnd="url(#arrowGreen)" />
+          <rect x="380" y="105" width="460" height="20" rx="4" fill="#070814" stroke="rgba(16, 185, 129, 0.15)" strokeWidth="0.5" />
+          <text x="610" y="118" fill="#10b981" fontSize="8" fontWeight="700" textAnchor="middle">
+            Immediate Step: Final AI Insights (Based on Scenario Data) Delivers Recommendations
+          </text>
 
+          {/* Bottom Blue Feedback Loop */}
+          <path d="M 1265 260 L 1265 520 L 80 520 L 80 500" stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="3 3" fill="none" markerEnd="url(#arrowBlue)" />
+          <path d="M 290 520 L 290 500" stroke="#3b82f6" strokeWidth="1.5" strokeDasharray="3 3" fill="none" markerEnd="url(#arrowBlue)" />
+          <rect x="540" y="510" width="140" height="20" rx="4" fill="#070814" stroke="rgba(59, 130, 246, 0.15)" strokeWidth="0.5" />
+          <text x="610" y="523" fill="#3b82f6" fontSize="8" fontWeight="700" textAnchor="middle">🔒 Returns Secured Data</text>
 
-          {/* ==================== STAGE 1: REQUEST ==================== */}
-          <g transform="translate(45, 60)">
-            <rect x="0" y="0" width="140" height="120" rx="10" fill="#1E293B" stroke="#334155" strokeWidth="1" />
-            <rect x="0" y="0" width="140" height="4" fill="#3B82F6" rx="2" />
-
-            {/* Minimal Icon: User / Query */}
-            <circle cx="70" cy="38" r="14" fill="#3B82F6" fillOpacity="0.15" />
-            <path d="M62 44 C62 39 66 37 70 37 C74 37 78 39 78 44" fill="none" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" />
-            <circle cx="70" cy="31" r="4.5" fill="#3B82F6" />
-
-            <text x="70" y="74" fill="#F8FAFC" fontSize="13" fontWeight="600" textAnchor="middle">Natural Input</text>
-            <text x="70" y="94" fill="#94A3B8" fontSize="11" textAnchor="middle">Pricing, IRP, MFN</text>
-            <text x="70" y="108" fill="#64748B" fontSize="10" textAnchor="middle">Business Queries</text>
-          </g>
+          {/* Bottom Red Feedback Loop */}
+          <path d="M 1265 450 L 1265 550 L 120 550 L 120 500" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 3" fill="none" markerEnd="url(#arrowRed)" />
+          <rect x="540" y="540" width="140" height="20" rx="4" fill="#070814" stroke="rgba(239, 68, 68, 0.15)" strokeWidth="0.5" />
+          <text x="610" y="553" fill="#ef4444" fontSize="8" fontWeight="700" textAnchor="middle">🗄️ Returns Raw Results</text>
 
 
-          {/* ==================== STAGE 2: CLAUDE AI ==================== */}
-          <g transform="translate(295, 60)">
-            <rect x="0" y="0" width="140" height="120" rx="10" fill="#1E293B" stroke="#334155" strokeWidth="1" />
-            <rect x="0" y="0" width="140" height="4" fill="#8B5CF6" rx="2" />
+          {/* ==================== CARDS ==================== */}
+          {/* Card 1: IRP Analyst */}
+          <foreignObject x="20" y="140" width="160" height="360">
+            <div style={{
+              boxSizing: 'border-box',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(124, 58, 237, 0.02)',
+              border: '1.5px solid rgba(124, 58, 237, 0.3)',
+              borderRadius: '12px',
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px',
+              textAlign: 'center',
+              color: '#ffffff'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  backgroundColor: '#7c3aed',
+                  color: '#ffffff',
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>1</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>IRP Analyst</span>
+              </div>
 
-            {/* Minimal Icon: AI Brain/Context */}
-            <circle cx="70" cy="38" r="14" fill="#8B5CF6" fillOpacity="0.15" />
-            <path d="M63 38 L67 34 L71 42 L75 34 L79 38" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <div style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                border: '1.5px solid rgba(124, 58, 237, 0.3)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: '10px'
+              }}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
 
-            <text x="70" y="74" fill="#F8FAFC" fontSize="13" fontWeight="600" text-anchor="middle">Claude AI</text>
-            <text x="70" y="94" fill="#94A3B8" fontSize="11" text-anchor="middle">Intent Parsing</text>
-            <text x="70" y="108" fill="#64748B" fontSize="10" text-anchor="middle">&amp; Context Engine</text>
-          </g>
+              <p style={{
+                fontSize: '0.75rem',
+                color: '#94a3b8',
+                lineHeight: 1.4,
+                margin: 0,
+                marginTop: '10px'
+              }}>
+                Performs Scenario Comparison and Revenue Impact Analysis
+              </p>
 
+              <div style={{
+                marginTop: 'auto',
+                display: 'flex',
+                gap: '12px',
+                justifyContent: 'center',
+                fontSize: '1rem',
+                opacity: 0.8
+              }}>
+                <span>📊</span>
+                <span>📈</span>
+                <span>📄</span>
+              </div>
+            </div>
+          </foreignObject>
 
-          {/* ==================== STAGE 3: MCP LAYER ==================== */}
-          <g transform="translate(545, 60)">
-            <rect x="0" y="0" width="140" height="120" rx="10" fill="#1E293B" stroke="#334155" strokeWidth="1" />
-            <rect x="0" y="0" width="140" height="4" fill="#10B981" rx="2" />
+          {/* Card 2: Claude Desktop */}
+          <foreignObject x="230" y="140" width="180" height="360">
+            <div style={{
+              boxSizing: 'border-box',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(37, 99, 235, 0.02)',
+              border: '1.5px solid rgba(37, 99, 235, 0.3)',
+              borderRadius: '12px',
+              padding: '14px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              color: '#ffffff'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>2</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Claude Desktop</span>
+              </div>
 
-            {/* Minimal Icon: Gateway / Tools */}
-            <circle cx="70" cy="38" r="14" fill="#10B981" fillOpacity="0.15" />
-            <rect x="63" y="32" width="14" height="12" rx="2" fill="none" stroke="#10B981" strokeWidth="2" />
-            <circle cx="70" cy="38" r="2" fill="#10B981" />
+              <div style={{
+                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                border: '1px solid rgba(37, 99, 235, 0.25)',
+                borderRadius: '6px',
+                padding: '6px',
+                textAlign: 'center',
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                color: '#3b82f6',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px'
+              }}>
+                <span>🤖</span> AI Business Assistant - Skill
+              </div>
 
-            <text x="70" y="74" fill="#F8FAFC" fontSize="13" fontWeight="600" text-anchor="middle">MCP Layer</text>
-            <text x="70" y="94" fill="#94A3B8" fontSize="11" text-anchor="middle">Semantic Gateway</text>
-            <text x="70" y="108" fill="#64748B" fontSize="10" text-anchor="middle">&amp; Router</text>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '10px' }}>
+                <div style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.05)',
+                  borderRadius: '8px',
+                  padding: '8px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.7rem', fontWeight: 700, color: '#3b82f6' }}>
+                    <span>🧠</span> Claude Brain
+                  </div>
+                  <div style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '2px', lineHeight: 1.3 }}>
+                    AI reasoning &amp; analysis capability
+                  </div>
+                </div>
 
-            {/* Subtle active highlight glow */}
-            <rect x="0" y="0" width="140" height="120" rx="10" fill="none" stroke="#10B981" strokeWidth="1" opacity="0.4">
-              <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
-            </rect>
-          </g>
+                <div style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.05)',
+                  borderRadius: '8px',
+                  padding: '8px'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.7rem', fontWeight: 700, color: '#3b82f6' }}>
+                    <span>⚙️</span> Scenario Engine
+                  </div>
+                  <div style={{ fontSize: '0.65rem', color: '#94a3b8', marginTop: '2px', lineHeight: 1.3 }}>
+                    Calculations &amp; scenario processing engine
+                  </div>
+                </div>
+              </div>
+            </div>
+          </foreignObject>
 
+          {/* Card 3: AWS MCP Server */}
+          <foreignObject x="490" y="140" width="180" height="360">
+            <div style={{
+              boxSizing: 'border-box',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(234, 88, 12, 0.02)',
+              border: '1.5px solid rgba(234, 88, 12, 0.3)',
+              borderRadius: '12px',
+              padding: '14px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              color: '#ffffff'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ea580c',
+                  color: '#ffffff',
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>3</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>AWS MCP Server</span>
+              </div>
 
-          {/* ==================== STAGE 4: DATA LAYER ==================== */}
-          <g transform="translate(795, 60)">
-            <rect x="0" y="0" width="140" height="120" rx="10" fill="#1E293B" stroke="#334155" strokeWidth="1" />
-            <rect x="0" y="0" width="140" height="4" fill="#06B6D4" rx="2" />
+              <div style={{ fontSize: '0.65rem', color: '#ea580c', fontWeight: 700, textAlign: 'center', opacity: 0.9 }}>
+                Secure Query Gateway &amp; MCP Tool Orchestrator
+              </div>
 
-            {/* Minimal Icon: Database / Warehouse */}
-            <circle cx="70" cy="38" r="14" fill="#06B6D4" fillOpacity="0.15" />
-            <ellipse cx="70" cy="34" rx="6" ry="2.5" fill="none" stroke="#06B6D4" strokeWidth="1.5" />
-            <path d="M64 34 v5 c0 1.4 2.7 2.5 6 2.5 s6 -1.1 6 -2.5 v-5" fill="none" stroke="#06B6D4" strokeWidth="1.5" />
-            <path d="M64 39 v5 c0 1.4 2.7 2.5 6 2.5 s6 -1.1 6 -2.5 v-5" fill="none" stroke="#06B6D4" strokeWidth="1.5" />
+              <div style={{
+                backgroundColor: 'rgba(234, 88, 12, 0.08)',
+                border: '1px dashed rgba(234, 88, 12, 0.3)',
+                borderRadius: '8px',
+                height: '60px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                color: '#f97316'
+              }}>
+                <span style={{ fontSize: '1.8rem' }}>📟</span>
+                <span style={{ fontSize: '1.4rem' }}>🔗</span>
+              </div>
 
-            <text x="70" y="74" fill="#F8FAFC" fontSize="13" fontWeight="600" text-anchor="middle">Data Layer</text>
-            <text x="70" y="94" fill="#94A3B8" fontSize="11" text-anchor="middle">AWS Glue &amp;</text>
-            <text x="70" y="108" fill="#64748B" fontSize="10" text-anchor="middle">Amazon Redshift</text>
-          </g>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '10px' }}>
+                {[
+                  { icon: '🔒', text: 'Secure Gateway' },
+                  { icon: '⚙️', text: 'Tool Orchestration' },
+                  { icon: '👤', text: 'Access Control' },
+                  { icon: '🔄', text: 'Query Management' }
+                ].map((item, idx) => (
+                  <div key={idx} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    backgroundColor: 'rgba(255,255,255,0.02)',
+                    padding: '6px 10px',
+                    borderRadius: '6px',
+                    border: '1px solid rgba(255,255,255,0.03)'
+                  }}>
+                    <span style={{ fontSize: '0.75rem' }}>{item.icon}</span>
+                    <span style={{ fontSize: '0.65rem', color: '#e2e8f0', fontWeight: 600 }}>{item.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </foreignObject>
 
+          {/* Card 4: Amazon Redshift */}
+          <foreignObject x="730" y="140" width="210" height="360">
+            <div style={{
+              boxSizing: 'border-box',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(79, 70, 229, 0.02)',
+              border: '1.5px solid rgba(79, 70, 229, 0.3)',
+              borderRadius: '12px',
+              padding: '14px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+              color: '#ffffff'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  backgroundColor: '#4f46e5',
+                  color: '#ffffff',
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>4</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Amazon Redshift</span>
+              </div>
 
-          {/* ==================== STAGE 5: RESPONSE ==================== */}
-          <g transform="translate(1045, 60)">
-            <rect x="0" y="0" width="110" height="120" rx="10" fill="#1E293B" stroke="#334155" strokeWidth="1" />
-            <rect x="0" y="0" width="110" height="4" fill="#3B82F6" rx="2" />
+              <div style={{ display: 'flex', justifyContent: 'center', color: '#6366f1', fontSize: '1.5rem', margin: '4px 0' }}>
+                <span>🗄️</span>
+              </div>
 
-            {/* Minimal Icon: Insights / Dashboard */}
-            <circle cx="55" cy="38" r="14" fill="#3B82F6" fillOpacity="0.15" />
-            <path d="M48 43 L48 39 M52 43 L52 35 M56 43 L56 32 M60 43 L60 37" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" />
+              <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '8px', flex: 1 }}>
+                <div style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.04)',
+                  borderRadius: '8px',
+                  padding: '6px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '4px',
+                  justifyContent: 'center'
+                }}>
+                  {[
+                    { label: 'Pricing Tables', icon: '📋' },
+                    { label: 'MFN Tables', icon: '📋' },
+                    { label: 'Stored Procs', icon: '⚙️' }
+                  ].map((tbl, idx) => (
+                    <div key={idx} style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      backgroundColor: 'rgba(0,0,0,0.2)',
+                      padding: '4px',
+                      borderRadius: '4px'
+                    }}>
+                      <span style={{ fontSize: '0.65rem' }}>{tbl.icon}</span>
+                      <span style={{ fontSize: '0.55rem', fontWeight: 700, color: '#e2e8f0', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{tbl.label}</span>
+                    </div>
+                  ))}
+                </div>
 
-            <text x="55" y="74" fill="#F8FAFC" fontSize="13" fontWeight="600" text-anchor="middle">Insights</text>
-            <text x="55" y="94" fill="#94A3B8" fontSize="11" text-anchor="middle">Dashboards &amp;</text>
-            <text x="55" y="108" fill="#64748B" fontSize="10" text-anchor="middle">Audit Trail</text>
-          </g>
+                <div style={{
+                  border: '1px dashed rgba(99, 102, 241, 0.4)',
+                  backgroundColor: 'rgba(99, 102, 241, 0.02)',
+                  borderRadius: '8px',
+                  padding: '6px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  gap: '4px'
+                }}>
+                  <span style={{ fontSize: '1.1rem' }}>⚙️</span>
+                  <span style={{ fontSize: '0.55rem', fontWeight: 800, color: '#818cf8', lineHeight: 1.2 }}>Scenario Calculation Engine</span>
+                </div>
+              </div>
 
+              <div style={{
+                fontSize: '0.6rem',
+                color: '#64748b',
+                textAlign: 'center',
+                borderTop: '1px solid rgba(255,255,255,0.05)',
+                paddingTop: '6px',
+                fontWeight: 500
+              }}>
+                Centralized Logic &amp; Governed Data Access
+              </div>
+            </div>
+          </foreignObject>
 
-          {/* ==================== FOOTER STATUS BAR ==================== */}
-          <g transform="translate(45, 220)">
-            <rect x="0" y="0" width="1110" height="50" rx="6" fill="#0B132B" stroke="#1E293B" strokeWidth="1" />
+          {/* Card 5: Final AI Insights & Recommendations */}
+          <foreignObject x="980" y="140" width="160" height="360">
+            <div style={{
+              boxSizing: 'border-box',
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(16, 185, 129, 0.02)',
+              border: '1.5px solid rgba(16, 185, 129, 0.3)',
+              borderRadius: '12px',
+              padding: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px',
+              textAlign: 'center',
+              color: '#ffffff'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{
+                  width: '18px',
+                  height: '18px',
+                  borderRadius: '50%',
+                  backgroundColor: '#059669',
+                  color: '#ffffff',
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>5</span>
+                <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>Final Insights</span>
+              </div>
 
-            {/* Status indicator live pulse */}
-            <circle cx="24" cy="25" r="4" fill="#10B981">
-              <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
-            </circle>
+              <div style={{
+                width: '72px',
+                height: '72px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                border: '2px solid #059669',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: '12px'
+              }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <polyline points="9 15 11 17 15 13" />
+                </svg>
+              </div>
 
-            <text x="40" y="29" fill="#94A3B8" fontSize="11" fontWeight="500">Architecture Pipeline Status: <tspan fill="#10B981" fontWeight="600">Operational</tspan></text>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#34d399', marginTop: '4px' }}>
+                AI Recommendations
+              </div>
 
-            <text x="1070" y="29" fill="#64748B" fontSize="11" textAnchor="end">Secure Enterprise Gateway</text>
-          </g>
+              <p style={{
+                fontSize: '0.7rem',
+                color: '#94a3b8',
+                lineHeight: 1.4,
+                margin: 0
+              }}>
+                Delivers actionable insights and revenue impact recommendations based on scenario outcomes.
+              </p>
+            </div>
+          </foreignObject>
 
+          {/* Output Stack (Column 6) */}
+          <foreignObject x="1170" y="190" width="190" height="260">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', boxSizing: 'border-box' }}>
+              <div style={{
+                backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                border: '1.5px solid rgba(16, 185, 129, 0.3)',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: '#ffffff'
+              }}>
+                <span style={{ color: '#10b981', fontSize: '1rem' }}>✔️</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#10b981' }}>Secured Data</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8' }}>(Processed Results)</span>
+                </div>
+              </div>
+
+              <div style={{
+                backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                border: '1.5px solid rgba(59, 130, 246, 0.3)',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: '#ffffff'
+              }}>
+                <span style={{ color: '#3b82f6', fontSize: '1rem' }}>🔒</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#3b82f6' }}>Secured Data</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8' }}>(Validated Results)</span>
+                </div>
+              </div>
+
+              <div style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                border: '1.5px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: '8px',
+                padding: '8px 12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: '#ffffff'
+              }}>
+                <span style={{ color: '#ef4444', fontSize: '1rem' }}>🗄️</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#ef4444' }}>Raw Results</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8' }}>(For Analysis)</span>
+                </div>
+              </div>
+            </div>
+          </foreignObject>
+
+          {/* Legend Area */}
+          <rect x="20" y="590" width="1340" height="135" rx="8" fill="#070814" stroke="rgba(255, 255, 255, 0.05)" strokeWidth="1" />
+          <text x="36" y="612" fill="#ffffff" fontSize="9" fontWeight="800" letterSpacing="0.05em" opacity="0.6">LEGEND</text>
+
+          <foreignObject x="30" y="625" width="1320" height="90">
+            <div style={{ display: 'flex', gap: '20px', justifyContent: 'space-between', color: '#ffffff', width: '100%', boxSizing: 'border-box' }}>
+              <div style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '150px' }}>
+                <span style={{ fontSize: '1.2rem', color: '#7c3aed' }}>👤</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#a78bfa' }}>IRP Analyst</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: 1.3 }}>Business user who defines scenarios and reviews analysis results.</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '150px' }}>
+                <span style={{ fontSize: '1.2rem', color: '#2563eb' }}>🤖</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#3b82f6' }}>Claude Desktop</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: 1.3 }}>AI assistant that interprets requests, executes skills and orchestrates flow.</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '150px' }}>
+                <span style={{ fontSize: '1.2rem', color: '#ea580c' }}>📟</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#f97316' }}>AWS MCP Server</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: 1.3 }}>Secure intermediary that manages tool invocation and query execution.</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '150px' }}>
+                <span style={{ fontSize: '1.2rem', color: '#4f46e5' }}>🗄️</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#818cf8' }}>Amazon Redshift</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: 1.3 }}>Centralized data warehouse containing pricing, MFN tables and calculation logic.</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '8px', flex: 1, minWidth: '150px' }}>
+                <span style={{ fontSize: '1.2rem', color: '#059669' }}>📄</span>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#34d399' }}>Final Insights</span>
+                  <span style={{ fontSize: '0.6rem', color: '#94a3b8', lineHeight: 1.3 }}>AI-generated insights and recommendations based on scenario outcomes.</span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', borderLeft: '1px solid rgba(255,255,255,0.08)', paddingLeft: '12px', minWidth: '200px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.6rem' }}>
+                  <span style={{ color: '#10b981', fontWeight: 700 }}>⤎ ⤏</span>
+                  <span style={{ color: '#94a3b8' }}>Returns Secured Data (Processed)</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.6rem' }}>
+                  <span style={{ color: '#3b82f6', fontWeight: 700 }}>⤎ ⤏</span>
+                  <span style={{ color: '#94a3b8' }}>Returns Secured Data (Validated)</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.6rem' }}>
+                  <span style={{ color: '#ef4444', fontWeight: 700 }}>⤎ ⤏</span>
+                  <span style={{ color: '#94a3b8' }}>Returns Raw Results (For Analysis)</span>
+                </div>
+              </div>
+            </div>
+          </foreignObject>
         </svg>
       )
     },
     {
       id: 'rakuten',
-      title: 'GenAI Manufacturer Validation Platform',
-      subtitle: 'Automating Warranty Claims Validation using LLM Agents',
+      title: 'GenAI Manufacturer Validation Solution',
+      subtitle: 'Automating Manufacturer Identification & Warranty Eligibility with GenAI + RAG',
       industry: 'Retail & E-commerce',
-      heroMetric: '30% Less',
-      metricsLabel: 'Manual Warranty Claims Verification Effort',
-      techs: ['GenAI', 'LLM Agent', 'Node.js', 'TypeScript', 'Vector DB'],
-      problem: 'Validating device claims against manufacturer warranty descriptions was entirely manual, creating long customer queues and return processing delays.',
-      discovery: 'Large language models could analyze unstructured warranty pdf docs and identify validation requirements.',
-      constraints: 'Strict SLA constraints: claim assessment must happen within 10 seconds.',
-      implementation: 'Built a warranty extraction RAG pipeline. Using semantic searches over device manuals, it provides clean extraction of warranty variables, verifying claims automatically.',
-      challenges: 'Minimizing LLM hallucination of warranty expiration timelines. Resolved by feeding structured prompt models strictly bound to retrieved manual context.',
-      lessons: 'Constrained prompts are vital when building deterministic systems with LLMs.',
-      architecture: (
-        <svg viewBox="0 0 400 180" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-          <rect x="10" y="70" width="80" height="40" rx="8" fill="rgba(59, 130, 246, 0.08)" stroke="#3B82F6" strokeWidth="1.5" />
-          <text x="50" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">Warranty Claim</text>
-
-          <rect x="140" y="70" width="90" height="40" rx="8" fill="rgba(139, 92, 246, 0.08)" stroke="#8B5CF6" strokeWidth="1.5" />
-          <text x="185" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">RAG Prompt</text>
-
-          <rect x="280" y="70" width="100" height="40" rx="8" fill="rgba(34, 197, 94, 0.08)" stroke="#22C55E" strokeWidth="1.5" />
-          <text x="330" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">LLM Inference</text>
-
-          <line x1="90" y1="90" x2="140" y2="90" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
-          <line x1="230" y1="90" x2="280" y2="90" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
-        </svg>
-      )
+      heroMetric: 'Sub-5 sec',
+      metricsLabel: 'Average Response Time Per Request',
+      techs: ['GPT-4o-mini', 'AWS Bedrock', 'Claude 3.5 Haiku', 'Llama 3 70B', 'spaCy', 'LangChain', 'Python'],
+      problem: 'Over 40,000 products are excluded from extended warranty sales because the shop did not set a JAN code, making it impossible to identify the manufacturer and verify eligibility.',
+      discovery: 'A GenAI + RAG-powered platform that retrieves, understands, and validates manufacturer information to support warranty eligibility decisions.',
+      constraints: 'SLA limit: Average response time per request must be Sub-5 sec. API cost must remain under $0.001 - $0.003 per call.',
+      implementation: 'Built an automated search and extraction RAG pipeline. The system queries GPT-4o-mini with web search for source discovery across listings, sites, and documents, then routes to AWS Bedrock (Llama 3 70B) for structured EAN processing, using spaCy NLP for response parsing fallback.',
+      challenges: 'Handling unstructured, scattered data and minimizing extraction errors for items missing JAN codes. Mitigated by using multi-source verification and cross-checking candidate manufacturers against a master database.',
+      lessons: 'Structured evidence and audit logs are key to building reliable LLM validation networks for compliance and transparency.',
+      architecture: null
     },
     {
       id: 'crt',
@@ -1611,24 +896,24 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
     {
       id: 'extract',
       title: 'Extract.AI — Intelligent Document Processing Platform',
-      subtitle: 'Enterprise Document Intelligence OCR',
-      industry: 'FinTech & Ops',
+      subtitle: 'Turning unstructured invoices, contracts and documents into structured, validated data — at scale.',
+      industry: 'Enterprise Automation & FinTech',
       heroMetric: '70% Faster',
       metricsLabel: 'System Integration & $6M Operational Savings',
-      techs: ['OCR', 'Python', 'PyTorch', 'AWS Textract', 'FastAPI'],
-      problem: 'Manual entry of invoices and vendor service contracts took a 40-person accounting team hours to process, causing delayed payments and billing errors.',
-      discovery: 'Document formats varied drastically by vendor, requiring a layout-aware OCR extraction pipeline.',
-      constraints: 'Strict regulatory guidelines demanded high extraction accuracy (>99%) before automated accounting updates.',
-      implementation: 'Created an intelligent ingestion routing framework. Led a 15-member team to deploy dynamic document templates coupled with custom Transformer layout models that extract key-value fields.',
-      challenges: 'Parsing low-resolution scanned PDFs. Resolved by writing a pre-processing image pipeline utilizing binarization and skew-correction filters.',
-      lessons: 'Technology integration speed is the ultimate product metric for enterprise SaaS.',
+      techs: ['Azure Form Recognizer', 'Python', 'AWS S3', 'AWS EC2', 'REST APIs', 'JSON / CSV', 'Business Rules Engine'],
+      problem: 'Millions of financial documents were trapped in PDFs, scans and images. Manual extraction caused delays, high operational costs, keying errors and limited downstream analytics.',
+      discovery: 'Template-based parsing breaks down with layout changes and requires constant manual rework. AI-powered extraction handles multiple layouts with zero template creation, making it highly flexible, scalable, and future-ready.',
+      constraints: 'Strict regulatory guidelines demanded high extraction accuracy (>99.4%) and data classification audits before automated accounting updates. Processing must handle extreme layout variations without hardcoded templates.',
+      implementation: 'Designed an end-to-end intelligent processing platform: Secure ingestion of invoices/contracts ➔ Azure Form Recognizer AI understanding ➔ Python normalization engine ➔ Configurable Business Rules Engine (duplicates, missing fields, dates) ➔ Structured JSON/CSV output & Analytics ingestion.',
+      challenges: 'High customization effort per vendor implementation and downstream format variations. OCR inaccuracies on low-quality scans created exceptions. Resolved by building a configuration-driven rule catalog and a confidence-scored Human-in-the-Loop review queue.',
+      lessons: 'Extract.AI transformed document processing from a manual, repetitive task into a reusable intelligent capability — unlocking speed, accuracy and measurable business value ($6M+ operational savings) at enterprise scale.',
       architecture: (
         <svg viewBox="0 0 400 180" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
           <rect x="10" y="70" width="80" height="40" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
           <text x="50" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">Vendor PDF</text>
 
           <rect x="130" y="70" width="110" height="40" rx="8" fill="rgba(139, 92, 246, 0.08)" stroke="#8B5CF6" strokeWidth="1.5" />
-          <text x="185" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">Layout-Transformer</text>
+          <text x="185" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">Form Recognizer</text>
 
           <rect x="290" y="70" width="90" height="40" rx="8" fill="rgba(6, 182, 212, 0.08)" stroke="#06B6D4" strokeWidth="1.5" />
           <text x="335" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">ERP Database</text>
@@ -1763,32 +1048,18 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
     {
       id: 'workforce',
       title: 'Intelligent Digital Data Workforce — HCP/HCO Matching',
-      subtitle: 'Automated Practitioner-to-Organization Precision Alignments',
-      industry: 'Healthcare & Operations',
-      heroMetric: '99% Match',
-      metricsLabel: 'Precision Alignments across Dynamic Hospital Rosters',
-      techs: ['Elasticsearch', 'Python', 'FastAPI', 'scikit-learn', 'SQL'],
-      problem: 'Manually cross-referencing Healthcare Providers (HCP) with Healthcare Organizations (HCO) database records was highly inefficient and subject to regulatory errors.',
-      discovery: 'Machine learning semantic match models could automatically resolve entity resolution anomalies across dynamic hospital rosters.',
-      constraints: 'Matching algorithms must maintain strict HIPAA compliance and preserve clear auditable logs.',
-      implementation: 'Built an entity resolution engine using Elasticsearch fuzzy matching and a custom layout model to score practitioner associations.',
-      challenges: 'Resolving duplicate records with minor name variants. Resolved by writing a pre-processing phonetic standardization utility.',
-      lessons: 'Data precision in healthcare databases is paramount for operational integrity.',
-      architecture: (
-        <svg viewBox="0 0 400 180" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-          <rect x="10" y="70" width="80" height="40" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
-          <text x="50" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">HCP/HCO Rosters</text>
-
-          <rect x="140" y="70" width="90" height="40" rx="8" fill="rgba(139, 92, 246, 0.08)" stroke="#8B5CF6" strokeWidth="1.5" />
-          <text x="185" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">Matching Model</text>
-
-          <rect x="280" y="70" width="100" height="40" rx="8" fill="rgba(6, 182, 212, 0.08)" stroke="#06B6D4" strokeWidth="1.5" />
-          <text x="330" y="95" fill="#F5F5F5" fontSize="10" textAnchor="middle" fontWeight="600">Aligned Registry</text>
-
-          <line x1="90" y1="90" x2="140" y2="90" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
-          <line x1="230" y1="90" x2="280" y2="90" stroke="rgba(255,255,255,0.2)" strokeWidth="1.5" />
-        </svg>
-      )
+      subtitle: 'Enterprise ML Entity Resolution & Master Data Management Pipeline',
+      industry: 'Healthcare, Pharmaceuticals & Medical Compliance',
+      heroMetric: '>90%',
+      metricsLabel: 'Reduction in Manual Stewardship Backlogs',
+      techs: ['Python', 'XGBoost', 'NLTK', 'Google Maps API', 'AWS EC2', 'S3'],
+      problem: 'Explosive volumes of multi-source vendor & CRM data created massive backlogs in manual data stewardship queues. Legacy deterministic rules collapsed under typos, abbreviations, nicknames, address variations & multi-location practices.',
+      discovery: 'An automated machine learning entity resolution pipeline cleansing, blocking, scoring and auto-merging records.',
+      constraints: 'Matching algorithms must maintain strict medical compliance and preserve clear auditable logs.',
+      implementation: 'Built an entity resolution engine using Google Maps spatial geocoding, multi-layer phonetic blocking, and an XGBoost model to score and auto-merge practitioner associations.',
+      challenges: 'Resolving duplicate records with minor name variants and inconsistent formats. Mitigated by using Jaro-Winkler and Levenshtein distances and spatial matches.',
+      lessons: 'Cleaner, reliable HCP/HCO master registries are vital for medical compliance, sales reporting, and HIPAA governance.',
+      architecture: null
     },
     {
       id: 'smartvision',
@@ -1826,7 +1097,64 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
     }
   ];
 
-  const currentProj = projects.find(p => p.id === activeProj) || projects[0];
+  const displayProjects = projects;
+
+  const currentProj = displayProjects.find(p => p.id === activeProj) || displayProjects[0];
+
+  const handlePrevProject = () => {
+    const currentIndex = displayProjects.findIndex(p => p.id === activeProj);
+    const prevIndex = (currentIndex - 1 + displayProjects.length) % displayProjects.length;
+    setActiveProj(displayProjects[prevIndex].id);
+
+    // Smooth scroll to the top of the projects section
+    const el = document.getElementById('projects');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleNextProject = () => {
+    const currentIndex = displayProjects.findIndex(p => p.id === activeProj);
+    const nextIndex = (currentIndex + 1) % displayProjects.length;
+    setActiveProj(displayProjects[nextIndex].id);
+
+    // Smooth scroll to the top of the projects section
+    const el = document.getElementById('projects');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Magnetic Button Interaction Helpers
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>, setOffset: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setOffset({ x: x * 0.35, y: y * 0.35 });
+  };
+
+  const handleMouseLeave = (setOffset: React.Dispatch<React.SetStateAction<{ x: number; y: number }>>) => {
+    setOffset({ x: 0, y: 0 });
+  };
+
+  // Keyboard navigation support
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
+        return;
+      }
+      if (e.key === 'ArrowRight') {
+        handleNextProject();
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevProject();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeProj]);
 
   useEffect(() => {
     setIsCompiling(true);
@@ -1931,13 +1259,13 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
 
   return (
     <section id="projects" data-section="projects" style={{ position: 'relative' }}>
-      <div style={{ marginBottom: '60px' }}>
+      <div style={{ marginBottom: '20px' }}>
         <h2 className="title-section">
           Featured Projects
         </h2>
-        <p className="body-lead" style={{ maxWidth: '600px' }}>
+        <p className="body-lead" style={{ maxWidth: '900px' }}>
           {viewMode === 'engineer'
-            ? 'Immersive case studies representing core technical architectures, operational constraints, and commercial scale.'
+            ? 'Enterprise AI, automation, and digital products built around real operational problems.'
             : 'High-level business outcomes, operational cost savings, and client leadership results.'}
         </p>
       </div>
@@ -2076,60 +1404,243 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
         </div>
       ) : (
         /* Render Engineer Mode Code Panel */
-        <div className="grid-layout" style={{ width: '100%', alignItems: 'stretch' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%', overflow: 'visible' }}>
 
-          {/* Project Selector List (Left Side) */}
-          <div style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {projects.map((proj) => {
-              const isSelected = activeProj === proj.id;
-              return (
-                <button
-                  key={proj.id}
-                  onClick={() => setActiveProj(proj.id)}
-                  className="glass-panel"
-                  data-cursor="pointer"
-                  data-project={proj.id}
-                  style={{
-                    width: '100%',
-                    padding: '20px',
-                    textAlign: 'left',
-                    border: isSelected ? '1px solid rgba(59, 130, 246, 0.4)' : '1px solid rgba(255, 255, 255, 0.04)',
-                    backgroundColor: isSelected ? 'rgba(59, 130, 246, 0.03)' : 'rgba(11, 11, 11, 0.4)',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '8px',
-                    outline: 'none',
-                    transform: isSelected ? 'scale(1.02)' : 'scale(1)',
-                  }}
-                >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                    <span style={{ fontSize: '0.8rem', color: isSelected ? '#3B82F6' : '#A3A3A3', fontWeight: 600, textTransform: 'uppercase' }}>
-                      {proj.industry}
-                    </span>
-                    <ArrowRight size={14} style={{ color: isSelected ? '#3B82F6' : 'transparent', transition: 'color 0.3s ease' }} />
+          {/* Project Selector List (Horizontal Flex Slider Layout) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '100%', overflow: 'visible', margin: '24px 0' }}>
+            {/* Left Chevron Button */}
+            <button
+              onClick={handlePrevProject}
+              onMouseMove={(e) => handleMouseMove(e, setPrevOffset)}
+              onMouseLeave={() => {
+                handleMouseLeave(setPrevOffset);
+                setIsPrevHovered(false);
+              }}
+              onMouseEnter={() => setIsPrevHovered(true)}
+              data-cursor="pointer"
+              aria-label="Previous project"
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                border: isPrevHovered
+                  ? `1px solid ${cardConfigMap[activeProj]?.badgeColor || 'rgba(255, 255, 255, 0.15)'}`
+                  : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isPrevHovered
+                  ? `rgba(${getRgbValues(cardConfigMap[activeProj]?.badgeColor || '#3B82F6')}, 0.12)`
+                  : 'rgba(11, 11, 11, 0.5)',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                flexShrink: 0,
+                fontSize: '1rem',
+                transition: 'border-color 350ms cubic-bezier(0.22, 1, 0.36, 1), background-color 350ms cubic-bezier(0.22, 1, 0.36, 1)'
+              }}
+            >
+              <span style={{
+                transform: `translate(${prevOffset.x}px, ${prevOffset.y}px)`,
+                transition: prevOffset.x === 0 && prevOffset.y === 0
+                  ? 'transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'none',
+                display: 'inline-block'
+              }}>&lt;</span>
+            </button>
+
+            {/* Flat Flex Cards Row */}
+            <div
+              style={{
+                display: 'flex',
+                gap: '16px',
+                flex: 1,
+                overflowX: 'auto',
+                scrollbarWidth: 'none',
+                padding: '8px 0'
+              }}
+              className="hide-scrollbar"
+            >
+              {displayProjects.map((proj, idx) => {
+                const isSelected = activeProj === proj.id;
+                const cardConfig = cardConfigMap[proj.id];
+                if (!cardConfig) return null;
+
+                return (
+                  <div
+                    key={proj.id}
+                    onClick={() => {
+                      setActiveProj(proj.id);
+                      const el = document.getElementById('projects');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className={`selector-project-card stagger-entrance-card ${isSelected ? 'active-card' : ''}`}
+                    style={{
+                      animationDelay: `${idx * 60}ms`,
+                      flexGrow: isSelected ? 2.2 : 1,
+                      flexShrink: 0,
+                      flexBasis: '0px',
+                      minWidth: '220px',
+                      height: '110px',
+                      backgroundColor: isSelected ? 'rgba(9, 13, 29, 0.6)' : 'rgba(11, 11, 11, 0.45)',
+                      border: isSelected ? `2px solid ${cardConfig.badgeColor}` : '1px solid rgba(255, 255, 255, 0.06)',
+                      boxShadow: isSelected ? `0 0 20px ${cardConfig.glowColor}` : 'none',
+                      borderRadius: '12px',
+                      display: 'flex',
+                      overflow: 'hidden',
+                      cursor: 'pointer',
+                      opacity: isSelected ? 1 : 0.65
+                    }}
+                  >
+                    {/* Left Column: Graphic (35% width) */}
+                    <div style={{
+                      width: '35%',
+                      height: '100%',
+                      backgroundColor: 'rgba(255, 255, 255, 0.01)',
+                      borderRight: '1px solid rgba(255, 255, 255, 0.04)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      position: 'relative'
+                    }}>
+                      {renderLeftGraphic(proj.id)}
+                    </div>
+
+                    {/* Right Column: Content (65% width) */}
+                    <div style={{
+                      width: '65%',
+                      padding: '10px 12px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      boxSizing: 'border-box',
+                      minWidth: 0
+                    }}>
+                      {/* Top Header line */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0 }}>
+                          {/* Index Badge */}
+                          <span style={{
+                            fontSize: '0.6rem',
+                            fontWeight: 800,
+                            color: '#ffffff',
+                            backgroundColor: cardConfig.badgeColor,
+                            padding: '1px 5px',
+                            borderRadius: '4px',
+                            lineHeight: 1,
+                            flexShrink: 0
+                          }}>
+                            {`0${idx + 1}`}
+                          </span>
+                          <span style={{
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                            color: '#ffffff',
+                            whiteSpace: 'nowrap',
+                            textOverflow: 'ellipsis',
+                            overflow: 'hidden'
+                          }}>
+                            {cardConfig.shortTitle}
+                          </span>
+                        </div>
+
+                        {/* Subtitle */}
+                        <span style={{
+                          fontSize: '0.6rem',
+                          color: '#94a3b8',
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden'
+                        }}>
+                          {cardConfig.shortSubtitle}
+                        </span>
+                      </div>
+
+                      {/* Middle row: Tags */}
+                      <div className="nudge-on-hover" style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', margin: '4px 0' }}>
+                        {cardConfig.cardTags.map((tag, tIdx) => (
+                          <span key={tIdx} style={{
+                            fontSize: '0.55rem',
+                            color: '#a3b3cc',
+                            backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid rgba(255, 255, 255, 0.05)',
+                            padding: '1px 4px',
+                            borderRadius: '4px',
+                            whiteSpace: 'nowrap'
+                          }}>
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Bottom Outcome */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#10b981', minWidth: 0 }}>
+                        <span style={{ fontSize: '0.55rem', flexShrink: 0 }}>📈</span>
+                        <span style={{
+                          fontSize: '0.55rem',
+                          fontWeight: 700,
+                          whiteSpace: 'nowrap',
+                          textOverflow: 'ellipsis',
+                          overflow: 'hidden',
+                          color: '#10b981'
+                        }}>
+                          {cardConfig.cardOutcome}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <h3 style={{ fontSize: '1.25rem', color: isSelected ? '#F5F5F5' : '#A3A3A3', transition: 'color 0.3s ease' }}>
-                    {proj.title}
-                  </h3>
-                  <p style={{ fontSize: '0.85rem', color: isSelected ? '#A3A3A3' : '#737373', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', margin: 0 }}>
-                    {proj.subtitle}
-                  </p>
-                </button>
-              );
-            })}
+                );
+              })}
+            </div>
+
+            {/* Right Chevron Button */}
+            <button
+              onClick={handleNextProject}
+              onMouseMove={(e) => handleMouseMove(e, setNextOffset)}
+              onMouseLeave={() => {
+                handleMouseLeave(setNextOffset);
+                setIsNextHovered(false);
+              }}
+              onMouseEnter={() => setIsNextHovered(true)}
+              data-cursor="pointer"
+              aria-label="Next project"
+              style={{
+                width: '40px',
+                height: '40px',
+                borderRadius: '50%',
+                border: isNextHovered
+                  ? `1px solid ${cardConfigMap[activeProj]?.badgeColor || 'rgba(255, 255, 255, 0.15)'}`
+                  : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: isNextHovered
+                  ? `rgba(${getRgbValues(cardConfigMap[activeProj]?.badgeColor || '#3B82F6')}, 0.12)`
+                  : 'rgba(11, 11, 11, 0.5)',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                flexShrink: 0,
+                fontSize: '1rem',
+                transition: 'border-color 350ms cubic-bezier(0.22, 1, 0.36, 1), background-color 350ms cubic-bezier(0.22, 1, 0.36, 1)'
+              }}
+            >
+              <span style={{
+                transform: `translate(${nextOffset.x}px, ${nextOffset.y}px)`,
+                transition: nextOffset.x === 0 && nextOffset.y === 0
+                  ? 'transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1)'
+                  : 'none',
+                display: 'inline-block'
+              }}>&gt;</span>
+            </button>
           </div>
 
-          {/* Detailed Case Study Panel (Right Side) */}
-          <div style={{ gridColumn: 'span 8' }} className="glass-panel">
+          {/* Detailed Case Study Panel (Takes Full Width) */}
+          <div style={{ width: '100%' }} className="glass-panel">
             <div style={{ padding: '36px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
               {/* Header / Hero Metric Banner */}
               <div className="case-study-header">
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <span style={{ color: '#3B82F6', fontSize: '0.9rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                    Case Study
-                  </span>
                   <h2 style={{ fontSize: '2rem', marginTop: '6px', marginBottom: '8px', color: 'var(--text-primary)' }}>
                     {currentProj.title}
                   </h2>
@@ -2205,6 +1716,12 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                   <MaciCustomDashboard />
                 ) : currentProj.id === 'crt' ? (
                   <CrtCustomDashboard />
+                ) : currentProj.id === 'extract' ? (
+                  <ExtractCustomDashboard />
+                ) : currentProj.id === 'rakuten' ? (
+                  <RakutenCustomDashboard />
+                ) : currentProj.id === 'workforce' ? (
+                  <WorkforceCustomDashboard />
                 ) : currentProj.id === 'bms' ? (
                   <>
                     {/* Row 1: Challenge & Constraints */}
@@ -2330,27 +1847,29 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                   </>
                 )}
 
-                {/* Row 3: Architecture Diagram Panel */}
-                <div>
-                  <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    <Database size={14} style={{ color: '#8B5CF6' }} />
-                    System Architecture
-                  </h4>
-                  <div
-                    style={{
-                      backgroundColor: 'var(--glass-bg)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '12px',
-                      padding: '24px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      minHeight: '180px'
-                    }}
-                  >
-                    {currentProj.architecture}
+                {/* Row 3: Architecture Diagram Panel (Hidden for custom dashboards) */}
+                {currentProj.id !== 'extract' && currentProj.id !== 'maci' && currentProj.id !== 'crt' && currentProj.id !== 'rakuten' && currentProj.id !== 'workforce' && (
+                  <div>
+                    <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      <Database size={14} style={{ color: '#8B5CF6' }} />
+                      System Architecture
+                    </h4>
+                    <div
+                      style={{
+                        backgroundColor: 'var(--glass-bg)',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '12px',
+                        padding: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minHeight: '180px'
+                      }}
+                    >
+                      {currentProj.architecture}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Row 2.5: Simulated Compiling Log (Computer Animation) */}
                 <div>
@@ -2455,7 +1974,190 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                 </div>
               </div>
 
+
+
+              {/* Row 6: Secondary Scroll Navigation Links */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: '16px',
+                  padding: '0 4px'
+                }}
+              >
+                {/* Previous Project text button */}
+                <button
+                  onClick={() => {
+                    const idx = displayProjects.findIndex(p => p.id === activeProj);
+                    const prevProj = displayProjects[(idx - 1 + displayProjects.length) % displayProjects.length];
+                    setActiveProj(prevProj.id);
+                    const el = document.getElementById('projects');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  data-cursor="pointer"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#64748b',
+                    fontSize: '0.8rem',
+                    cursor: 'pointer',
+                    padding: 0,
+                    transition: 'color 0.2s'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = '#64748b'; }}
+                >
+                  ← Previous Project
+                </button>
+
+                {/* Dots indicator */}
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  {displayProjects.map((proj, idx) => {
+                    const isSelected = activeProj === proj.id;
+                    const cardConfig = cardConfigMap[proj.id];
+                    return (
+                      <button
+                        key={proj.id}
+                        onClick={() => {
+                          setActiveProj(proj.id);
+                          const el = document.getElementById('projects');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        data-cursor="pointer"
+                        style={{
+                          width: isSelected ? '28px' : '6px',
+                          height: '6px',
+                          borderRadius: '3px',
+                          backgroundColor: isSelected ? (cardConfig?.badgeColor || '#3B82F6') : '#27272a',
+                          border: 'none',
+                          cursor: 'pointer',
+                          padding: 0,
+                          transition: 'width 550ms cubic-bezier(0.22, 1, 0.36, 1), background-color 550ms cubic-bezier(0.22, 1, 0.36, 1)'
+                        }}
+                        aria-label={`Go to project ${idx + 1}`}
+                      />
+                    );
+                  })}
+                </div>
+
+                {/* Next Project text button */}
+                <button
+                  onClick={handleNextProject}
+                  data-cursor="pointer"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#3B82F6',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    padding: 0,
+                    transition: 'color 0.2s'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#60a5fa'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = '#3B82F6'; }}
+                >
+                  Next Project ➔
+                </button>
+              </div>
+
             </div>
+          </div>
+
+          {/* Standing Project Pill Navigation Status Bar */}
+          <div
+            style={{
+              marginTop: '24px',
+              backgroundColor: '#030303',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              borderRadius: '9999px',
+              padding: '12px 28px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '16px',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)'
+            }}
+          >
+            {/* Left: Projects Button */}
+            <button
+              onClick={() => {
+                const el = document.getElementById('projects');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+              data-cursor="pointer"
+              style={{
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '20px',
+                padding: '6px 14px',
+                fontSize: '0.75rem',
+                color: '#ffffff',
+                backgroundColor: 'transparent',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                transition: 'border-color 0.2s'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'; }}
+            >
+              <span>← Projects</span>
+            </button>
+
+            {/* Center: Index and Title */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.8rem', color: '#ffffff', flexWrap: 'wrap' }}>
+              {/* Grid Icon representation */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 3px)', gap: '2px', color: '#64748b' }}>
+                {[...Array(9)].map((_, i) => (
+                  <span key={i} style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: 'currentColor' }} />
+                ))}
+              </div>
+              <span style={{ fontWeight: 700, display: 'flex', gap: '4px' }}>
+                <span style={{ color: '#3B82F6' }}>{`0${displayProjects.findIndex(p => p.id === activeProj) + 1}`}</span>
+                <span style={{ color: '#475569' }}>{` / 0${displayProjects.length}`}</span>
+              </span>
+              <span style={{ fontWeight: 700, color: '#ffffff' }}>
+                {cardConfigMap[activeProj]?.shortTitle || ''}
+              </span>
+              {(() => {
+                const short = (cardConfigMap[activeProj]?.shortTitle || '').toLowerCase().trim();
+                const full = (currentProj.title || '').toLowerCase().trim();
+                const isDuplicate = short === full || full.includes(short) || short.includes(full) || short.substring(0, 15) === full.substring(0, 15);
+                return !isDuplicate && (
+                  <span style={{ color: '#64748b' }}>
+                    {currentProj.title}
+                  </span>
+                );
+              })()}
+            </div>
+
+            {/* Right: Next Project with Dynamic Title */}
+            <button
+              onClick={handleNextProject}
+              data-cursor="pointer"
+              style={{
+                border: 'none',
+                backgroundColor: 'transparent',
+                cursor: 'pointer',
+                fontSize: '0.8rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <span style={{ color: '#64748b' }}>Next:</span>
+              <span style={{ color: '#3B82F6', fontWeight: 600 }}>
+                {(() => {
+                  const idx = displayProjects.findIndex(p => p.id === activeProj);
+                  const nextProj = displayProjects[(idx + 1) % displayProjects.length];
+                  return cardConfigMap[nextProj.id]?.shortTitle || '';
+                })()}
+              </span>
+              <span style={{ color: '#3B82F6' }}>➔</span>
+            </button>
           </div>
 
         </div>

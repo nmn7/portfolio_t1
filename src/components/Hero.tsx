@@ -1,6 +1,9 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import useMagnetic from '../hooks/useMagnetic';
 import { ArrowRight, Download, Award, ShieldCheck, Activity, Database, Cpu } from 'lucide-react';
+import WarpText from './WarpText';
+import Aurora from './Aurora';
+import Globe from './Globe';
 
 const SUBTITLES = [
   'AI Solutions Engineer',
@@ -17,7 +20,7 @@ export default function Hero() {
   const projectsBtnRef = useMagnetic(0.2) as React.RefObject<HTMLButtonElement>;
   const resumeBtnRef = useMagnetic(0.2) as React.RefObject<HTMLAnchorElement>;
 
-  const visualRef = useRef<SVGSVGElement>(null);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,25 +34,7 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
-  // Simple mouse move reaction for the visual vector portrait
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!visualRef.current) return;
-      const rect = visualRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left - rect.width / 2;
-      const y = e.clientY - rect.top - rect.height / 2;
 
-      const elements = visualRef.current.querySelectorAll('.parallax-node');
-      elements.forEach((el, index) => {
-        const speed = (index + 1) * 0.05;
-        (el as SVGElement).style.transform = `translate(${x * speed}px, ${y * speed}px)`;
-        (el as SVGElement).style.transition = 'transform 0.2s ease-out';
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   const stats = [
     { value: '8+ Years', label: 'Experience', icon: <Activity size={16} /> },
@@ -60,50 +45,36 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" data-section="hero" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '140px 24px 60px 24px' }}>
+    <section id="hero" data-section="hero" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '95px 24px 24px 24px' }}>
 
       {/* Aurora Backdrop */}
-      <div className="aurora-bg">
-        <div className="aurora-circle aurora-1" />
-        <div className="aurora-circle aurora-2" />
-        <div className="aurora-circle aurora-3" />
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: -1, pointerEvents: 'none' }}>
+        <Aurora
+          colorStops={["#5227FF","#7cff67","#5227FF"]}
+          amplitude={1.0}
+          blend={0.5}
+        />
       </div>
 
-      <div className="grid-layout" style={{ width: '100%', flex: 1, alignItems: 'center' }}>
+      <div className="grid-layout" style={{ width: '100%', flex: 1, alignItems: 'center', paddingBottom: '24px' }}>
 
         {/* Left Content */}
-        <div style={{ gridColumn: 'span 7', display: 'flex', flexDirection: 'column', gap: '28px', textAlign: 'left' }}>
-
-          {/* Badge */}
-          <div
-            data-animate="fade-in"
-            style={{
-              alignSelf: 'flex-start',
-              padding: '6px 14px',
-              borderRadius: '30px',
-              backgroundColor: 'rgba(59, 130, 246, 0.08)',
-              border: '1px solid rgba(59, 130, 246, 0.2)',
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              color: '#3B82F6',
-              letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22C55E', display: 'inline-block', boxShadow: '0 0 8px #22C55E' }} />
-            Available for AI Engineering & Product Roles
-          </div>
+        <div style={{ gridColumn: 'span 7', display: 'flex', flexDirection: 'column', gap: '20px', textAlign: 'left' }}>
 
           {/* Name */}
-          <h1 className="title-large" style={{ margin: 0 }} data-reveal="true">
-            Naman Mehta
-          </h1>
+          <WarpText
+            text="Naman Mehta"
+            color="#FFFFFF"
+            fontSize="clamp(3.5rem, 8vw, 6.5rem)"
+            fontWeight={900}
+            fontFamily="'Outfit', sans-serif"
+            align="left"
+            className="title-large animate-slide-up delay-150"
+            style={{ margin: 0, minHeight: '130px' }}
+          />
 
           {/* Subtitle with vertical slide-fade effect */}
-          <div style={{ height: '50px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
+          <div className="animate-slide-up delay-250" style={{ height: '40px', overflow: 'hidden', display: 'flex', alignItems: 'center' }}>
             <span
               className={`subtitle-large ${fadeState}`}
               style={{
@@ -121,12 +92,12 @@ export default function Hero() {
           </div>
 
           {/* Supporting Text */}
-          <p className="body-lead" style={{ maxWidth: '600px', margin: 0 }} data-animate="fade-in">
-            I design and build AI-powered enterprise products that solve complex business problems across Pharma, Retail, and Manufacturing—combining product thinking, cloud engineering, and intelligent automation.
+          <p className="body-lead animate-slide-up delay-350" style={{ maxWidth: '600px', margin: 0 }}>
+            I design and build AI-powered enterprise products that solve complex business problems across Pharma, Retail, and Finance product thinking, cloud engineering, and intelligent automation.
           </p>
 
           {/* Call to Actions */}
-          <div style={{ display: 'flex', gap: '16px', marginTop: '12px' }} data-animate="fade-in">
+          <div className="animate-slide-up delay-450" style={{ display: 'flex', gap: '16px', marginTop: '6px' }}>
             <button
               ref={projectsBtnRef}
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
@@ -139,7 +110,7 @@ export default function Hero() {
             </button>
             <a
               ref={resumeBtnRef}
-              href="/Naman_Mehta_Resume.pdf"
+              href={`${import.meta.env.BASE_URL}Naman_Mehta_Resume.pdf`}
               download
               className="btn btn-secondary"
               data-cursor="pointer"
@@ -151,85 +122,33 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right Portrait Graphic */}
+        {/* Right Globe Column */}
         <div
+          className="animate-slide-up delay-400"
           style={{
             gridColumn: 'span 5',
             display: 'flex',
             justifyContent: 'center',
-            position: 'relative'
+            alignItems: 'center',
+            position: 'relative',
+            height: '420px',
+            width: '100%',
           }}
-          data-animate="fade-in"
         >
-          <div
-            className="glass-panel"
-            style={{
-              width: '100%',
-              maxWidth: '380px',
-              aspectRatio: '1/1',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1px solid var(--border-color)',
-              overflow: 'hidden',
-              position: 'relative',
-              background: 'var(--glass-bg)',
-              boxShadow: 'var(--shadow-premium)'
-            }}
-          >
-            {/* Animated Interactive SVG Tech Art (acting as organic profile portrait) */}
-            <svg
-              ref={visualRef}
-              viewBox="0 0 200 200"
-              style={{ width: '75%', height: '75%', overflow: 'visible' }}
-            >
-              {/* Outer rotating orbit lines */}
-              <circle cx="100" cy="100" r="70" stroke="var(--border-color)" strokeWidth="1" fill="none" />
-              <circle cx="100" cy="100" r="90" stroke="rgba(59,130,246,0.05)" strokeWidth="1" fill="none" strokeDasharray="5 15" />
-
-              {/* Parallax node clusters */}
-              <g className="parallax-node" style={{ transformBox: 'fill-box', transformOrigin: 'center' }}>
-                <circle cx="100" cy="50" r="5" fill="#3B82F6" opacity="0.8" filter="drop-shadow(0 0 5px #3B82F6)" />
-                <circle cx="50" cy="130" r="4" fill="#8B5CF6" opacity="0.7" />
-                <circle cx="150" cy="130" r="4" fill="#06B6D4" opacity="0.7" />
-
-                <line x1="100" y1="50" x2="50" y2="130" stroke="var(--border-color)" strokeWidth="1" />
-                <line x1="50" y1="130" x2="150" y2="130" stroke="var(--border-color)" strokeWidth="1" />
-                <line x1="150" y1="130" x2="100" y2="50" stroke="var(--border-color)" strokeWidth="1" />
-              </g>
-
-              <g className="parallax-node" style={{ transformBox: 'fill-box', transformOrigin: 'center' }}>
-                <circle cx="100" cy="100" r="15" fill="rgba(59, 130, 246, 0.08)" stroke="#3B82F6" strokeWidth="1.5" />
-                <path d="M93 100 L107 100 M100 93 L100 107" stroke="#3B82F6" strokeWidth="2" />
-
-                <circle cx="70" cy="80" r="3" fill="#22C55E" opacity="0.8" />
-                <circle cx="130" cy="80" r="3" fill="#3B82F6" opacity="0.8" />
-                <circle cx="100" cy="150" r="3" fill="#8B5CF6" opacity="0.8" />
-
-                <line x1="100" y1="100" x2="70" y2="80" stroke="rgba(59,130,246,0.3)" strokeWidth="1" strokeDasharray="2 2" />
-                <line x1="100" y1="100" x2="130" y2="80" stroke="rgba(59,130,246,0.3)" strokeWidth="1" strokeDasharray="2 2" />
-                <line x1="100" y1="100" x2="100" y2="150" stroke="rgba(59,130,246,0.3)" strokeWidth="1" strokeDasharray="2 2" />
-              </g>
-
-              {/* Glowing decorative rings */}
-              <circle cx="100" cy="100" r="45" stroke="var(--border-color)" strokeWidth="1" fill="none" />
-              <circle cx="100" cy="100" r="30" stroke="rgba(59,130,246,0.2)" strokeWidth="0.5" fill="none" strokeDasharray="1 5" />
-            </svg>
-          </div>
+          <Globe />
         </div>
       </div>
 
       {/* Stats Below */}
       <div
-        data-animate="fade-in"
+        className="animate-slide-up delay-550"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
           gap: '24px',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: '60px',
+          paddingTop: '24px',
           borderTop: '1px solid var(--border-color)',
           width: '100%',
         }}

@@ -163,7 +163,7 @@ export default function Contact() {
 
           <a
             ref={resumeRef}
-            href="/Naman_Mehta_Resume.pdf"
+            href={`${import.meta.env.BASE_URL}Naman_Mehta_Resume.pdf`}
             download
             className="btn btn-secondary"
             data-cursor="pointer"
