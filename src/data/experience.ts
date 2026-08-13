@@ -10,6 +10,7 @@ export interface TimelineStep {
 export interface Role {
   id: string;
   company: string;
+  logo: string;
   title: string;
   period: string;
   location: string;
@@ -28,25 +29,25 @@ export const TIMELINE_STEPS: TimelineStep[] = [
   },
   {
     id: 'automation',
-    title: 'Automation',
+    title: 'Cognitive Automation',
     iconName: 'Terminal',
-    subtitle: 'Scaling efficiency',
-    description: 'Mastered Intelligent Automation using Python scripting, Selenium, PowerApps, and enterprise RPA tools (Automation Anywhere, Blue Prism). Designed self-healing workflows to process thousands of transactions without human error.',
-    impact: 'Automated manual workloads, reducing process execution times from hours to seconds.'
+    subtitle: 'Scaling operations with scripts',
+    description: 'Wrote advanced Python scripts, optical character recognition engines (OCR), and robotic process automations (RPA). Replaced fragile manual workflows with resilient event-driven background routines.',
+    impact: 'Automated data processes across 33 countries, yielding millions of dollars in annual run-rate savings.'
   },
   {
-    id: 'cloud',
-    title: 'Cloud Systems',
+    id: 'infrastructure',
+    title: 'Cloud & Infrastructure',
     iconName: 'Cloud',
-    subtitle: 'Architecting scalable infrastructure',
-    description: 'Transitioned automation to serverless and distributed environments. Architected secure, highly-available cloud data pipelines using AWS Lambda, Glue, Redshift, and S3 to process large enterprise datasets.',
-    impact: 'Built cloud pipelines handling millions of data points with 99.99% system availability.'
+    subtitle: 'High-availability foundations',
+    description: 'Designed secure, auto-scaling backend infrastructure on AWS. Managed multi-region VPC architectures, pricing intelligence databases, and high-frequency API systems supporting tens of thousands of requests.',
+    impact: 'Engineered backend databases processing millions of rows with zero unplanned downtime.'
   },
   {
-    id: 'ai',
-    title: 'Applied AI & Vision',
+    id: 'iot',
+    title: 'Edge AI & Vision IoT',
     iconName: 'Cpu',
-    subtitle: 'Bringing intelligence to the edge',
+    subtitle: 'Applying computer vision physically',
     description: 'Developed and integrated computer vision models (SageMaker) with physical edge hardware (AWS IoT Greengrass). Built custom vision inspection systems directly inside manufacturing environments.',
     impact: 'Deployed real-time vision pipelines, saving millions in manufacturing scrap costs.'
   },
@@ -72,6 +73,7 @@ export const ROLES: Role[] = [
   {
     id: 'srm',
     company: 'SRM Technologies',
+    logo: 'srm_logo.png',
     title: 'Associate Project Manager / Forward Deployed Engineer',
     period: 'Feb 2025 - Current',
     location: 'Bengaluru, India',
@@ -84,6 +86,7 @@ export const ROLES: Role[] = [
   {
     id: 'zs-crt',
     company: 'ZS Associates',
+    logo: 'ZS_Associates.svg',
     title: 'Product Lead / Senior Consultant',
     period: 'Jan 2023 - Feb 2025',
     location: 'Gurugram, India',
@@ -97,6 +100,7 @@ export const ROLES: Role[] = [
   {
     id: 'zs-nlp',
     company: 'ZS Associates',
+    logo: 'ZS_Associates.svg',
     title: 'NLP Solution Lead / Consultant',
     period: 'Jan 2022 - Dec 2022',
     location: 'Gurugram, India',
@@ -110,6 +114,7 @@ export const ROLES: Role[] = [
   {
     id: 'zs-extract-ai',
     company: 'ZS Associates',
+    logo: 'ZS_Associates.svg',
     title: 'Intelligent Automation Product Lead',
     period: 'Jul 2021 - Dec 2021',
     location: 'Gurugram, India',
@@ -123,6 +128,7 @@ export const ROLES: Role[] = [
   {
     id: 'zs-digital-data',
     company: 'ZS Associates',
+    logo: 'ZS_Associates.svg',
     title: 'Product Owner – Intelligent Data Workforce',
     period: 'Jan 2021 - Sep 2021',
     location: 'Gurugram, India',
@@ -136,6 +142,7 @@ export const ROLES: Role[] = [
   {
     id: 'zs-survey-link',
     company: 'ZS Associates',
+    logo: 'ZS_Associates.svg',
     title: 'Associate Consultant / Developer',
     period: 'Aug 2019 - Dec 2020',
     location: 'Gurugram, India',
@@ -149,6 +156,7 @@ export const ROLES: Role[] = [
   {
     id: 'zs-sales-rpa',
     company: 'ZS Associates',
+    logo: 'ZS_Associates.svg',
     title: 'Associate / Developer',
     period: 'Jun 2018 - Jul 2019',
     location: 'Gurugram, India',

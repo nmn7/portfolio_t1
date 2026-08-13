@@ -67,7 +67,19 @@ export default function Experience() {
                       transition: 'all 0.3s ease'
                     }}
                   >
-                    <Briefcase size={20} />
+                    {role.logo ? (
+                      <img
+                        src={`${import.meta.env.BASE_URL}${role.logo}`}
+                        alt={`${role.company} Logo`}
+                        style={{
+                          width: '24px',
+                          height: '24px',
+                          objectFit: 'contain'
+                        }}
+                      />
+                    ) : (
+                      <Briefcase size={20} />
+                    )}
                   </div>
                   <div>
                     <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>
