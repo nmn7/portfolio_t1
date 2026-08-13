@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import Loader from './components/Loader';
-import CustomCursor from './components/CustomCursor';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import MyStory from './components/MyStory';
-import FeaturedProjects from './components/FeaturedProjects';
-import ImpactDashboard from './components/ImpactDashboard';
-import TechLandscape from './components/TechLandscape';
-import EngineeringPlayground from './components/EngineeringPlayground';
-import Experience from './components/Experience';
-import Certifications from './components/Certifications';
-import Contact from './components/Contact';
+import Loader from '../components/ui/Loader';
+import CustomCursor from '../components/ui/CustomCursor';
+import Navbar from '../components/navigation/Navbar';
+import Hero from '../sections/Hero/Hero';
+import MyStory from '../sections/About/MyStory';
+import FeaturedProjects from '../sections/Work/FeaturedProjects';
+import ImpactDashboard from '../sections/About/ImpactDashboard';
+import TechLandscape from '../sections/Capabilities/TechLandscape';
+import EngineeringPlayground from '../sections/Capabilities/EngineeringPlayground';
+import Experience from '../sections/Work/Experience';
+import Certifications from '../sections/Work/Certifications';
+import Contact from '../sections/Contact/Contact';
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);

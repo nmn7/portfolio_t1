@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import useMagnetic from '../hooks/useMagnetic';
+import useMagnetic from '../../hooks/useMagnetic';
 import { Mail, Download, Clock } from 'lucide-react';
+import { SITE_METADATA } from '../../data/site';
 
 export default function Contact() {
   const [localTime, setLocalTime] = useState('');
@@ -14,7 +15,7 @@ export default function Contact() {
   useEffect(() => {
     const updateTime = () => {
       const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'Asia/Kolkata',
+        timeZone: SITE_METADATA.timezone,
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
@@ -123,7 +124,7 @@ export default function Contact() {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
           <a
             ref={emailRef}
-            href="mailto:namanmehta711@gmail.com"
+            href={`mailto:${SITE_METADATA.email}`}
             className="btn btn-primary"
             data-cursor="pointer"
             data-magnetic="true"
@@ -135,7 +136,7 @@ export default function Contact() {
 
           <a
             ref={linkedinRef}
-            href="https://linkedin.com/in/naman711"
+            href={SITE_METADATA.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary"
@@ -149,7 +150,7 @@ export default function Contact() {
 
           <a
             ref={githubRef}
-            href="https://github.com/"
+            href={SITE_METADATA.github}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary"
@@ -195,14 +196,14 @@ export default function Contact() {
           © {currentYear} Naman Mehta. All Rights Reserved.
         </div>
 
-        {/* Ticking clock showing IST Time zone */}
+        {/* Ticking clock showing Local Time zone */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Clock size={14} style={{ color: '#3B82F6' }} />
           <span>Local Time:</span>
           <span style={{ color: 'var(--text-primary)', fontWeight: 600, fontFamily: 'monospace' }}>
             {localTime}
           </span>
-          <span>(IST / GMT+5:30)</span>
+          <span>({SITE_METADATA.timezoneLabel})</span>
         </div>
       </div>
 

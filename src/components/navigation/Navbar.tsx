@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import useMagnetic from '../hooks/useMagnetic';
+import useMagnetic from '../../hooks/useMagnetic';
 import { Download, Menu, X } from 'lucide-react';
+import { NAV_ITEMS } from '../../data/site';
 
 interface NavbarProps {
   viewMode: 'engineer' | 'consultant';
@@ -14,13 +15,7 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
 
   const resumeBtnRef = useMagnetic(0.25) as React.RefObject<HTMLAnchorElement>;
 
-  const navItems = [
-    { label: 'Work', href: '#story', id: 'story' },
-    { label: 'Projects', href: '#projects', id: 'projects' },
-    { label: 'Capabilities', href: '#landscape', id: 'landscape' },
-    { label: 'Experience', href: '#experience', id: 'experience' },
-    { label: 'Contact', href: '#contact', id: 'contact' }
-  ];
+  const navItems = NAV_ITEMS;
 
   useEffect(() => {
     // Detect scroll for background changes

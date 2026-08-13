@@ -1,65 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { Briefcase, Cpu, Cloud, BrainCircuit, Terminal, Milestone } from 'lucide-react';
+import type { TimelineStep } from '../../data/experience';
+import { TIMELINE_STEPS as STEPS } from '../../data/experience';
 
-interface TimelineStep {
-  id: string;
-  title: string;
-  icon: React.ReactNode;
-  subtitle: string;
-  description: string;
-  impact: string;
-}
-
-const STEPS: TimelineStep[] = [
-  {
-    id: 'problems',
-    title: 'Business Problems',
-    icon: <Briefcase size={20} />,
-    subtitle: 'Where everything begins',
-    description: 'Began by directly analyzing core operational leaks in enterprise settings. Rather than writing code immediately, focused on understanding the financial impact, user bottlenecks, and manual overhead in Pharma, Finance, and Retail.',
-    impact: 'Developed an innate business-first mindset, focusing strictly on delivering measurable ROI.'
-  },
-  {
-    id: 'automation',
-    title: 'Automation',
-    icon: <Terminal size={20} />,
-    subtitle: 'Scaling efficiency',
-    description: 'Mastered Intelligent Automation using Python scripting, Selenium, PowerApps, and enterprise RPA tools (Automation Anywhere, Blue Prism). Designed self-healing workflows to process thousands of transactions without human error.',
-    impact: 'Automated manual workloads, reducing process execution times from hours to seconds.'
-  },
-  {
-    id: 'cloud',
-    title: 'Cloud Systems',
-    icon: <Cloud size={20} />,
-    subtitle: 'Architecting scalable infrastructure',
-    description: 'Transitioned automation to serverless and distributed environments. Architected secure, highly-available cloud data pipelines using AWS Lambda, Glue, Redshift, and S3 to process large enterprise datasets.',
-    impact: 'Built cloud pipelines handling millions of data points with 99.99% system availability.'
-  },
-  {
-    id: 'ai',
-    title: 'Applied AI & Vision',
-    icon: <Cpu size={20} />,
-    subtitle: 'Bringing intelligence to the edge',
-    description: 'Developed and integrated computer vision models (SageMaker) with physical edge hardware (AWS IoT Greengrass). Built custom vision inspection systems directly inside manufacturing environments.',
-    impact: 'Deployed real-time vision pipelines, saving millions in manufacturing scrap costs.'
-  },
-  {
-    id: 'genai',
-    title: 'Generative AI & MCP',
-    icon: <BrainCircuit size={20} />,
-    subtitle: 'The cognitive agent era',
-    description: 'Engineered advanced RAG pipelines, prompt systems, and autonomous agent frameworks. Built specialized Model Context Protocol (MCP) servers allowing LLMs to interact securely with legacy enterprise databases.',
-    impact: 'Delivered conversational pricing intelligence and autonomous warranty processing platforms.'
-  },
-  {
-    id: 'forward',
-    title: 'Forward Deployed Engineering',
-    icon: <Milestone size={20} />,
-    subtitle: 'Bridging the product gap',
-    description: 'Operating at the intersection of product, engineering, and client operations. Deploying directly alongside cross-functional enterprise teams to diagnose constraints, design system architectures, and deliver custom, production-grade products rapidly.',
-    impact: 'Led cross-functional client integrations driving $12M+ in validated business value.'
+const getIcon = (name: 'Briefcase' | 'Terminal' | 'Cloud' | 'Cpu' | 'BrainCircuit' | 'Milestone') => {
+  switch (name) {
+    case 'Briefcase': return <Briefcase size={20} />;
+    case 'Terminal': return <Terminal size={20} />;
+    case 'Cloud': return <Cloud size={20} />;
+    case 'Cpu': return <Cpu size={20} />;
+    case 'BrainCircuit': return <BrainCircuit size={20} />;
+    case 'Milestone': return <Milestone size={20} />;
   }
-];
+};
 
 export default function MyStory() {
   const [activeStep, setActiveStep] = useState<string>('problems');
@@ -128,7 +81,7 @@ export default function MyStory() {
             }}
           />
 
-          {STEPS.map((step, index) => {
+          {STEPS.map((step: TimelineStep, index: number) => {
             const isActive = activeStep === step.id;
             return (
               <div
@@ -163,7 +116,7 @@ export default function MyStory() {
                     marginTop: '12px'
                   }}
                 >
-                  {step.icon}
+                  {getIcon(step.iconName)}
                 </div>
 
                 {/* Story Content Card */}

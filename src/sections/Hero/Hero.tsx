@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import useMagnetic from '../hooks/useMagnetic';
+import useMagnetic from '../../hooks/useMagnetic';
 import { ArrowRight, Download, Award, ShieldCheck, Activity, Database, Cpu } from 'lucide-react';
-import WarpText from './WarpText';
-import Aurora from './Aurora';
-import Globe from './Globe';
+import WarpText from '../../components/ui/WarpText';
+import Aurora from '../../components/ui/Aurora';
+import Globe from '../../components/ui/Globe';
 
 const SUBTITLES = [
   'AI Solutions Engineer',
