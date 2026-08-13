@@ -7,7 +7,6 @@ import MyStory from '../sections/About/MyStory';
 import FeaturedProjects from '../sections/Work/FeaturedProjects';
 import ImpactDashboard from '../sections/About/ImpactDashboard';
 import TechLandscape from '../sections/Capabilities/TechLandscape';
-import EngineeringPlayground from '../sections/Capabilities/EngineeringPlayground';
 import Experience from '../sections/Work/Experience';
 import Certifications from '../sections/Work/Certifications';
 import Contact from '../sections/Contact/Contact';
@@ -107,8 +106,6 @@ export default function App() {
             {/* Tech Cluster Constellation */}
             <TechLandscape viewMode={viewMode} />
 
-            {/* Architecture Flow Simulator */}
-            <EngineeringPlayground />
 
             {/* Roles Accordions */}
             <Experience />
