@@ -475,17 +475,12 @@ export default function TechLandscape({ viewMode = 'engineer' }: TechLandscapePr
       </div>
 
       {/* Bottom Process Bar: My Approach */}
-      <div className="glass-panel" style={{
+      <div className="glass-panel approach-container" style={{
         marginTop: '32px',
         padding: '20px 24px',
         background: viewMode === 'consultant' ? '#F3F3F8' : 'rgba(9, 7, 20, 0.4)',
         border: viewMode === 'consultant' ? '1px solid rgba(31, 31, 46, 0.08)' : '1px solid var(--border-color)',
-        borderRadius: '16px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '24px'
+        borderRadius: '16px'
       }}>
         {/* Label */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -494,7 +489,7 @@ export default function TechLandscape({ viewMode = 'engineer' }: TechLandscapePr
         </div>
 
         {/* Steps */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flex: 1, justifyContent: 'space-around', flexWrap: 'wrap' }}>
+        <div className="approach-steps">
           {[
             { step: 'Discover', label: 'Understand & Align', icon: Compass },
             { step: 'Design', label: 'Architect & Plan', icon: PenTool },
@@ -504,7 +499,7 @@ export default function TechLandscape({ viewMode = 'engineer' }: TechLandscapePr
           ].map((item, idx) => {
             const StepIcon = item.icon;
             return (
-              <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div key={idx} className="approach-step-item">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <div style={{
                     width: '32px',
@@ -524,7 +519,7 @@ export default function TechLandscape({ viewMode = 'engineer' }: TechLandscapePr
                     <span style={{ fontSize: '0.65rem', color: viewMode === 'consultant' ? '#4A4A4A' : 'var(--text-secondary)' }}>{item.label}</span>
                   </div>
                 </div>
-                {idx < 4 && <ChevronRight size={14} style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />}
+                {idx < 4 && <ChevronRight size={14} className="approach-chevron" style={{ color: 'var(--text-secondary)', opacity: 0.3 }} />}
               </div>
             );
           })}

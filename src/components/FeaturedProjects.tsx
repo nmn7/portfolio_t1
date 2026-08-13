@@ -1479,8 +1479,6 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                       flexGrow: isSelected ? 2.2 : 1,
                       flexShrink: 0,
                       flexBasis: '0px',
-                      minWidth: '220px',
-                      height: '110px',
                       backgroundColor: isSelected ? 'rgba(9, 13, 29, 0.6)' : 'rgba(11, 11, 11, 0.45)',
                       border: isSelected ? `2px solid ${cardConfig.badgeColor}` : '1px solid rgba(255, 255, 255, 0.06)',
                       boxShadow: isSelected ? `0 0 20px ${cardConfig.glowColor}` : 'none',
@@ -1532,7 +1530,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                           }}>
                             {`0${idx + 1}`}
                           </span>
-                          <span style={{
+                          <span className="project-card-title" style={{
                             fontSize: '0.72rem',
                             fontWeight: 800,
                             color: '#ffffff',
@@ -1545,7 +1543,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                         </div>
 
                         {/* Subtitle */}
-                        <span style={{
+                        <span className="project-card-subtitle" style={{
                           fontSize: '0.6rem',
                           color: '#94a3b8',
                           whiteSpace: 'nowrap',
@@ -1576,7 +1574,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                       {/* Bottom Outcome */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#10b981', minWidth: 0 }}>
                         <span style={{ fontSize: '0.55rem', flexShrink: 0 }}>📈</span>
-                        <span style={{
+                        <span className="project-card-outcome" style={{
                           fontSize: '0.55rem',
                           fontWeight: 700,
                           whiteSpace: 'nowrap',
@@ -1641,10 +1639,10 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
               {/* Header / Hero Metric Banner */}
               <div className="case-study-header">
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <h2 style={{ fontSize: '2rem', marginTop: '6px', marginBottom: '8px', color: 'var(--text-primary)' }}>
+                  <h2 className="case-study-title">
                     {currentProj.title}
                   </h2>
-                  <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)' }}>
+                  <p className="case-study-subtitle">
                     {currentProj.subtitle}
                   </p>
                 </div>

@@ -181,7 +181,7 @@ export default function MyStory() {
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                    <h3 style={{ fontSize: '1.4rem', color: isActive ? '#3B82F6' : 'var(--text-primary)' }}>
+                    <h3 className="story-card-title" style={{ color: isActive ? '#3B82F6' : 'var(--text-primary)' }}>
                       {step.title}
                     </h3>
                     <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
@@ -220,6 +220,7 @@ export default function MyStory() {
 
         {/* Right Side: Portrait Image (4 columns) */}
         <div
+          className="story-photo-container"
           style={{
             gridColumn: 'span 4',
             position: 'sticky',

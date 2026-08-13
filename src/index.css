@@ -524,6 +524,148 @@ body.mode-consultant .btn-secondary:hover {
   }
 }
 
+.story-card-title {
+  font-size: 1.4rem;
+  transition: font-size 0.3s ease;
+}
+@media (max-width: 600px) {
+  .story-card-title {
+    font-size: 1.15rem !important;
+  }
+}
+
+/* Mobile Overrides for Buttons */
+@media (max-width: 600px) {
+  .btn {
+    padding: 10px 18px !important;
+    font-size: 0.85rem !important;
+  }
+}
+@media (max-width: 400px) {
+  .btn {
+    padding: 8px 14px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* Portrait photo wrapper max-width & centering */
+.story-photo-container {
+  width: 100%;
+}
+@media (max-width: 900px) {
+  .story-photo-container {
+    max-width: 280px !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* Accordion spacing and title size updates */
+.experience-header h3 {
+  transition: font-size 0.3s ease;
+}
+@media (max-width: 768px) {
+  .experience-header {
+    padding: 16px !important;
+  }
+  .experience-header h3 {
+    font-size: 1.05rem !important;
+  }
+}
+
+/* My Approach section stacking style rules */
+.approach-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.approach-steps {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.approach-step-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.approach-chevron {
+  display: block;
+}
+@media (max-width: 768px) {
+  .approach-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .approach-steps {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+  .approach-step-item {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  .approach-chevron {
+    display: none !important;
+  }
+}
+
+/* Case Study details titles sizing overrides */
+.case-study-title {
+  font-size: 2rem;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.case-study-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+}
+@media (max-width: 768px) {
+  .case-study-title {
+    font-size: 1.4rem !important;
+  }
+  .case-study-subtitle {
+    font-size: 0.95rem !important;
+  }
+  .case-study-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 16px !important;
+  }
+  .case-study-header > div {
+    width: 100% !important;
+  }
+}
+
+/* Project selector deck card size adjustments */
+.selector-project-card {
+  transition: all 0.3s ease;
+}
+@media (max-width: 768px) {
+  .selector-project-card {
+    min-width: 195px !important;
+    height: 95px !important;
+  }
+  .selector-project-card .project-card-title {
+    font-size: 0.65rem !important;
+  }
+  .selector-project-card .project-card-subtitle {
+    font-size: 0.55rem !important;
+  }
+  .selector-project-card .project-card-outcome {
+    font-size: 0.5rem !important;
+  }
+}
+
+
 /* Theme Transitions */
 body, section, h1, h2, h3, h4, h5, p, a, button, .glass-panel {
   transition: background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),

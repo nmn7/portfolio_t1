@@ -97,7 +97,7 @@ export default function Hero() {
           </p>
 
           {/* Call to Actions */}
-          <div className="animate-slide-up delay-450" style={{ display: 'flex', gap: '16px', marginTop: '6px' }}>
+          <div className="animate-slide-up delay-450" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '6px' }}>
             <button
               ref={projectsBtnRef}
               onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
