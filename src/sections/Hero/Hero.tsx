@@ -48,7 +48,7 @@ export default function Hero() {
     <section id="hero" data-section="hero" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '95px 24px 24px 24px' }}>
 
       {/* Aurora Backdrop */}
-      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', zIndex: -1, pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', top: 0, bottom: 0, left: '-48px', right: '-48px', overflow: 'hidden', zIndex: -1, pointerEvents: 'none' }}>
         <Aurora
           colorStops={["#5227FF","#7cff67","#5227FF"]}
           amplitude={1.0}
