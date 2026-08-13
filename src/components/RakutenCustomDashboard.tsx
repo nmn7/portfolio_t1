@@ -49,7 +49,7 @@ export default function RakutenCustomDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px', width: '100%' }} className="responsive-dashboard-grid">
         
         {/* Row 1 Grid: Challenge & GenAI Solution */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
           
           {/* Box 1: 01 Challenge */}
           <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(139, 92, 246, 0.15)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -277,7 +277,7 @@ export default function RakutenCustomDashboard() {
         </div>
 
         {/* Row 2 Grid: Results & Client Impact */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
 
           {/* Box 3: 03 Results */}
           <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(99, 102, 241, 0.15)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>

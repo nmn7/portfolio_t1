@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useMagnetic from '../hooks/useMagnetic';
-import { Download } from 'lucide-react';
+import { Download, Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   viewMode: 'engineer' | 'consultant';
@@ -10,6 +10,7 @@ interface NavbarProps {
 export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
   const [activeSection, setActiveSection] = useState('hero');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const resumeBtnRef = useMagnetic(0.25) as React.RefObject<HTMLAnchorElement>;
 
@@ -190,6 +191,7 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
 
         {/* Links */}
         <div
+          className="nav-links-desktop"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -264,6 +266,89 @@ export default function Navbar({ viewMode, setViewMode }: NavbarProps) {
             Resume
           </a>
         </div>
+
+        {/* Mobile menu toggle */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="mobile-menu-toggle"
+          aria-label="Toggle navigation menu"
+          style={{
+            border: 'none',
+            outline: 'none',
+            cursor: 'pointer',
+            backgroundColor: 'transparent',
+            color: viewMode === 'consultant' ? '#1F1F2E' : '#F5F5F5',
+            display: 'none',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile navigation overlay menu */}
+      <div 
+        className={`mobile-nav-overlay ${isMobileMenuOpen ? 'open' : ''}`}
+        style={{
+          backgroundColor: viewMode === 'consultant' ? 'rgba(243, 243, 248, 0.98)' : 'rgba(11, 11, 11, 0.98)',
+          border: viewMode === 'consultant' ? '1px solid rgba(31, 31, 46, 0.1)' : '1px solid rgba(255, 255, 255, 0.08)',
+        }}
+      >
+        <ul
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            listStyle: 'none',
+            padding: 0,
+            margin: 0
+          }}
+        >
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <a
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{
+                  color: activeSection === item.id ? (viewMode === 'consultant' ? '#2563EB' : '#3B82F6') : (viewMode === 'consultant' ? '#1F1F2E' : '#A3A3A3'),
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                  display: 'block',
+                  padding: '8px 0',
+                  transition: 'color 0.3s ease'
+                }}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        
+        {/* Mobile Download Resume CTA */}
+        <a
+          href={`${import.meta.env.BASE_URL}Naman_Mehta_Resume.pdf`}
+          download
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="btn btn-secondary"
+          style={{
+            padding: '12px 20px',
+            fontSize: '0.9rem',
+            borderRadius: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            border: viewMode === 'consultant' ? '1px solid #1F1F2E' : '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundColor: viewMode === 'consultant' ? '#1F1F2E' : 'rgba(255, 255, 255, 0.04)',
+            color: viewMode === 'consultant' ? '#F3F3F8' : '#F5F5F5',
+            marginTop: '8px'
+          }}
+        >
+          <Download size={16} />
+          Download Resume
+        </a>
       </div>
     </nav>
   );

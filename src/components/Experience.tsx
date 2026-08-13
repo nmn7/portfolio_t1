@@ -143,13 +143,9 @@ export default function Experience() {
               {/* Card Header (Always Visible) */}
               <button
                 onClick={() => toggleExpand(role.id)}
+                className="experience-header"
                 data-cursor="pointer"
                 style={{
-                  width: '100%',
-                  padding: '24px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
                   background: 'none',
                   border: 'none',
                   outline: 'none',
@@ -186,7 +182,7 @@ export default function Experience() {
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
                   {/* Meta details on wide viewports */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  <div className="experience-meta">
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <Calendar size={12} />
                       {role.period}
@@ -208,10 +204,8 @@ export default function Experience() {
               {/* Expandable Body */}
               {isExpanded && (
                 <div
+                  className="experience-body"
                   style={{
-                    padding: '0 24px 24px 84px',
-                    borderTop: '1px solid var(--border-color)',
-                    paddingTop: '20px',
                     animation: 'slide-fade-in 0.3s ease-out'
                   }}
                 >

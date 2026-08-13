@@ -4,7 +4,7 @@ export default function MaciCustomDashboard() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', width: '100%' }}>
       {/* Row 1: Problem & Solution Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
         {/* The Problem Card */}
         <div style={{
           backgroundColor: 'rgba(239, 68, 68, 0.02)',

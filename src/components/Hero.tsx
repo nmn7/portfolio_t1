@@ -124,14 +124,13 @@ export default function Hero() {
 
         {/* Right Globe Column */}
         <div
-          className="animate-slide-up delay-400"
+          className="animate-slide-up delay-400 hero-globe-container"
           style={{
             gridColumn: 'span 5',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             position: 'relative',
-            height: '420px',
             width: '100%',
           }}
         >

@@ -29,7 +29,7 @@ export default function CrtCustomDashboard() {
 
 
       {/* Row 1: Problem & Product */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
 
         {/* The Problem */}
         <div style={{

@@ -1802,7 +1802,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                 ) : (
                   <>
                     {/* Row 1: Problem & Constraints */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    <div className="responsive-grid">
                       <div>
                         <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                           <ShieldAlert size={14} style={{ color: '#EF4444' }} />
@@ -1824,7 +1824,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                     </div>
 
                     {/* Row 2: Discovery & Lessons */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    <div className="responsive-grid">
                       <div>
                         <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                           <Layers size={14} style={{ color: '#06B6D4' }} />
@@ -2066,21 +2066,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
           </div>
 
           {/* Standing Project Pill Navigation Status Bar */}
-          <div
-            style={{
-              marginTop: '24px',
-              backgroundColor: '#030303',
-              border: '1px solid rgba(255, 255, 255, 0.05)',
-              borderRadius: '9999px',
-              padding: '12px 28px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              flexWrap: 'wrap',
-              gap: '16px',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)'
-            }}
-          >
+          <div className="project-navigation-bar">
             {/* Left: Projects Button */}
             <button
               onClick={() => {

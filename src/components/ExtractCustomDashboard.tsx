@@ -121,7 +121,7 @@ export default function ExtractCustomDashboard() {
       `}} />
 
       {/* Row 1: Problem & Key Design Decision */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
 
         {/* Left: The Problem Card */}
         <div style={{
