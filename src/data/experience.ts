@@ -48,7 +48,7 @@ export const TIMELINE_STEPS: TimelineStep[] = [
     title: 'Edge AI & Vision IoT',
     iconName: 'Cpu',
     subtitle: 'Applying computer vision physically',
-    description: 'Developed and integrated computer vision models (SageMaker) with physical edge hardware (AWS IoT Greengrass). Built custom vision inspection systems directly inside manufacturing environments.',
+    description: 'Developed and integrated computer vision models (SageMaker) with physical edge hardware (AWS IoT Greengrass). Built custom vision inspection systems directly inside Finance environments.',
     impact: 'Deployed real-time vision pipelines, saving millions in manufacturing scrap costs.'
   },
   {
@@ -101,7 +101,7 @@ export const ROLES: Role[] = [
     id: 'zs-nlp',
     company: 'ZS Associates',
     logo: 'ZS_Associates.svg',
-    title: 'NLP Solution Lead / Consultant',
+    title: 'Business Technology Solutions Consultant',
     period: 'Jan 2022 - Dec 2022',
     location: 'Gurugram, India',
     summary:
@@ -143,7 +143,7 @@ export const ROLES: Role[] = [
     id: 'zs-survey-link',
     company: 'ZS Associates',
     logo: 'ZS_Associates.svg',
-    title: 'Associate Consultant / Developer',
+    title: 'Associate Consultant',
     period: 'Aug 2019 - Dec 2020',
     location: 'Gurugram, India',
     summary:
