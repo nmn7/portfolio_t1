@@ -49,7 +49,7 @@ export default function RakutenCustomDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px', width: '100%' }} className="responsive-dashboard-grid">
         
         {/* Row 1 Grid: Challenge & GenAI Solution */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
           
           {/* Box 1: 01 Challenge */}
           <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(139, 92, 246, 0.15)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -142,7 +142,7 @@ export default function RakutenCustomDashboard() {
                 <span>RAG Pipeline Architecture</span>
                 {isSimulating && <span style={{ fontSize: '0.7rem', color: '#10b981', textTransform: 'none' }}>Processing simulation...</span>}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 110px), 1fr))', gap: '10px' }}>
                 {RAG_STEPS.map((step, idx) => {
                   const StepIcon = step.icon;
                   const isActive = activeStep === idx;
@@ -277,7 +277,7 @@ export default function RakutenCustomDashboard() {
         </div>
 
         {/* Row 2 Grid: Results & Client Impact */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
           {/* Box 3: 03 Results */}
           <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(99, 102, 241, 0.15)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -373,7 +373,7 @@ export default function RakutenCustomDashboard() {
               </h4>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '14px' }}>
               {[
                 { 
                   title: 'Expanded Warranty Eligibility', 

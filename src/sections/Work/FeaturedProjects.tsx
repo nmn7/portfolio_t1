@@ -174,7 +174,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                 className="btn btn-secondary"
                 style={{ padding: '8px 16px', fontSize: '0.85rem', borderRadius: '12px' }}
               >
-                â† Prev Slide
+                ← Prev Slide
               </button>
               <button
                 onClick={() => setSlideIndex(prev => (prev + 1) % projects.length)}
@@ -182,7 +182,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                 className="btn btn-secondary"
                 style={{ padding: '8px 16px', fontSize: '0.85rem', borderRadius: '12px' }}
               >
-                Next Slide â†’
+                Next Slide →
               </button>
             </div>
           </div>
@@ -505,7 +505,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
 
           {/* Detailed Case Study Panel (Takes Full Width) */}
           <div style={{ width: '100%' }} className="glass-panel">
-            <div style={{ padding: '36px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <div className="case-study-glass-inner" style={{ padding: '36px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
 
               {/* Header / Hero Metric Banner */}
               <div className="case-study-header">
@@ -526,7 +526,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                       borderRadius: '16px',
                       backgroundColor: 'rgba(34, 197, 94, 0.03)',
                       border: '1px solid rgba(34, 197, 94, 0.25)',
-                      minWidth: '240px',
+                      minWidth: 'min(100%, 240px)',
                       textAlign: 'left',
                       display: 'flex',
                       flexDirection: 'column',
@@ -563,7 +563,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                       borderRadius: '16px',
                       backgroundColor: 'rgba(34, 197, 94, 0.05)',
                       border: '1px solid rgba(34, 197, 94, 0.2)',
-                      minWidth: '180px',
+                      minWidth: 'min(100%, 180px)',
                       textAlign: 'center',
                       flexShrink: 0
                     }}
@@ -594,7 +594,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                 ) : currentProj.id === 'bms' ? (
                   <>
                     {/* Row 1: Challenge & Constraints */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', textAlign: 'left' }}>
+                    <div className="responsive-2col-grid" style={{ display: 'grid', gap: '24px', textAlign: 'left' }}>
                       <div>
                         <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                           <AlertCircle size={16} style={{ color: '#EF4444' }} />
@@ -622,7 +622,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                     </div>
 
                     {/* Row 2: Discovery & Solution */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', textAlign: 'left' }}>
+                    <div className="responsive-2col-grid" style={{ display: 'grid', gap: '24px', textAlign: 'left' }}>
                       <div>
                         <h4 style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                           <Search size={16} style={{ color: '#06B6D4' }} />
@@ -843,16 +843,16 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                 </div>
               </div>
 
-
-
               {/* Row 6: Secondary Scroll Navigation Links */}
               <div
+                className="secondary-project-nav"
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   marginTop: '16px',
-                  padding: '0 4px'
+                  padding: '0 4px',
+                  gap: '8px'
                 }}
               >
                 {/* Previous Project text button */}
@@ -872,16 +872,18 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                     fontSize: '0.8rem',
                     cursor: 'pointer',
                     padding: 0,
-                    transition: 'color 0.2s'
+                    transition: 'color 0.2s',
+                    whiteSpace: 'nowrap'
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#ffffff'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#64748b'; }}
                 >
-                  â† Previous Project
+                  <span className="nav-text-desktop">← Previous Project</span>
+                  <span className="nav-text-mobile">← Prev</span>
                 </button>
 
                 {/* Dots indicator */}
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexShrink: 0 }}>
                   {displayProjects.map((proj, idx) => {
                     const isSelected = activeProj === proj.id;
                     const cardConfig = cardConfigMap[proj.id];
@@ -895,7 +897,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                         }}
                         data-cursor="pointer"
                         style={{
-                          width: isSelected ? '28px' : '6px',
+                          width: isSelected ? '24px' : '6px',
                           height: '6px',
                           borderRadius: '3px',
                           backgroundColor: isSelected ? (cardConfig?.badgeColor || '#3B82F6') : '#27272a',
@@ -922,12 +924,14 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                     fontWeight: 600,
                     cursor: 'pointer',
                     padding: 0,
-                    transition: 'color 0.2s'
+                    transition: 'color 0.2s',
+                    whiteSpace: 'nowrap'
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#60a5fa'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.color = '#3B82F6'; }}
                 >
-                  Next Project âž”
+                  <span className="nav-text-desktop">Next Project →</span>
+                  <span className="nav-text-mobile">Next →</span>
                 </button>
               </div>
 
@@ -959,11 +963,11 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'; }}
             >
-              <span>â† Projects</span>
+              <span>← Projects</span>
             </button>
 
             {/* Center: Index and Title */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '0.8rem', color: '#ffffff', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.8rem', color: '#ffffff', flexWrap: 'wrap', justifyContent: 'center' }}>
               {/* Grid Icon representation */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 3px)', gap: '2px', color: '#64748b' }}>
                 {[...Array(9)].map((_, i) => (
@@ -977,16 +981,6 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
               <span style={{ fontWeight: 700, color: '#ffffff' }}>
                 {cardConfigMap[activeProj]?.shortTitle || ''}
               </span>
-              {(() => {
-                const short = (cardConfigMap[activeProj]?.shortTitle || '').toLowerCase().trim();
-                const full = (currentProj.title || '').toLowerCase().trim();
-                const isDuplicate = short === full || full.includes(short) || short.includes(full) || short.substring(0, 15) === full.substring(0, 15);
-                return !isDuplicate && (
-                  <span style={{ color: '#64748b' }}>
-                    {currentProj.title}
-                  </span>
-                );
-              })()}
             </div>
 
             {/* Right: Next Project with Dynamic Title */}
@@ -1011,7 +1005,7 @@ export default function FeaturedProjects({ viewMode }: FeaturedProjectsProps) {
                   return cardConfigMap[nextProj.id]?.shortTitle || '';
                 })()}
               </span>
-              <span style={{ color: '#3B82F6' }}>âž”</span>
+              <span style={{ color: '#3B82F6' }}>→</span>
             </button>
           </div>
 

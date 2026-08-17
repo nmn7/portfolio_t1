@@ -29,7 +29,7 @@ export default function CrtCustomDashboard() {
 
 
       {/* Row 1: Problem & Product */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
         {/* The Problem */}
         <div style={{
@@ -236,7 +236,7 @@ export default function CrtCustomDashboard() {
       </div>
 
       {/* Row 3: How 340B Check Works & End-to-End Workflow */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
         {/* How 340B Check Works */}
         <div style={{
@@ -498,10 +498,10 @@ export default function CrtCustomDashboard() {
           </div>
 
           {/* Sub Workspace split */}
-          <div style={{ display: 'flex', minHeight: '480px' }}>
+          <div className="crt-workspace-split" style={{ display: 'flex', minHeight: '480px' }}>
 
             {/* Left Sidebar */}
-            <div style={{
+            <div className="crt-workspace-sidebar" style={{
               width: '160px',
               backgroundColor: '#111222',
               borderRight: '1px solid rgba(255,255,255,0.03)',
@@ -645,7 +645,7 @@ export default function CrtCustomDashboard() {
               </div>
 
               {/* Workspace Grid Row 2 (Research Summary Graph & Recent Research Table) */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '12px' }}>
 
                 {/* Research Summary Area Chart */}
                 <div style={{ backgroundColor: '#161726', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '8px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -655,7 +655,7 @@ export default function CrtCustomDashboard() {
                   </div>
 
                   {/* Stats line */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '8px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 70px), 1fr))', gap: '8px', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '8px' }}>
                     <div>
                       <div style={{ fontSize: '0.6rem', color: '#94A3B8' }}>Total Research</div>
                       <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FFFFFF' }}>128 <span style={{ fontSize: '0.65rem', color: '#10B981', fontWeight: 500 }}>↑ 18%</span></div>
@@ -824,7 +824,7 @@ export default function CrtCustomDashboard() {
       </div>
 
       {/* Row 5: Multi-Client Architecture & Business Impact */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
         {/* Multi-Client Architecture (Mini details) */}
         <div style={{

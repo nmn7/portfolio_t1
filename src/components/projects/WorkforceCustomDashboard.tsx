@@ -65,7 +65,7 @@ export default function WorkforceCustomDashboard() {
       {/* Main Grid: Challenge & Architecture */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '24px', width: '100%' }} className="responsive-dashboard-grid">
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
           {/* 1. Challenge Card */}
           <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(239, 68, 68, 0.15)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -115,7 +115,7 @@ export default function WorkforceCustomDashboard() {
             </p>
 
             {/* Pipeline Stage Indicators */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 110px), 1fr))', gap: '10px' }}>
               {PIPELINE_STEPS.map((step, idx) => {
                 const StepIcon = step.icon;
                 const isActive = activeStep === idx;
@@ -160,7 +160,7 @@ export default function WorkforceCustomDashboard() {
             {isProcessing && <span style={{ fontSize: '0.7rem', color: '#10b981', textTransform: 'none' }}>Running XGBoost scorer...</span>}
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '16px' }}>
             <div>
               <label style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'block', marginBottom: '6px' }}>Source Record A</label>
               <input
@@ -243,7 +243,7 @@ export default function WorkforceCustomDashboard() {
                   XGBoost Score: <strong>{matchResult.score}</strong>
                 </span>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', fontSize: '0.7rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 100px), 1fr))', gap: '12px', fontSize: '0.7rem' }}>
                 <div>
                   <span style={{ color: '#64748b', display: 'block' }}>Levenshtein Dist:</span>
                   <span style={{ color: '#ffffff', fontWeight: 700 }}>{matchResult.levenshtein}</span>
@@ -265,7 +265,7 @@ export default function WorkforceCustomDashboard() {
         </div>
 
         {/* Row 3 Grid: Model Techniques, Tech Stack & Client Impact */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
           {/* Box 4: ML Models & Key Techniques */}
           <div className="glass-panel" style={{ padding: '24px', border: '1px solid rgba(139, 92, 246, 0.15)', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -284,7 +284,7 @@ export default function WorkforceCustomDashboard() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ fontSize: '0.75rem', color: '#cbd5e1', fontWeight: 700 }}>Key Techniques Deployed:</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '8px' }}>
                 {[
                   'Data Clean & Standardize',
                   'Custom Name Dicts',
@@ -366,7 +366,7 @@ export default function WorkforceCustomDashboard() {
         </div>
 
         {/* Tech Stack, Data Sources & Workflow Row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
           {/* Tech Stack & Sources */}
           <div className="glass-panel" style={{ padding: '20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '12px' }}>

@@ -121,7 +121,7 @@ export default function ExtractCustomDashboard() {
       `}} />
 
       {/* Row 1: Problem & Key Design Decision */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
         {/* Left: The Problem Card */}
         <div style={{
@@ -438,7 +438,7 @@ export default function ExtractCustomDashboard() {
           </span>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 110px), 1fr))',
             gap: '8px',
             backgroundColor: 'rgba(0,0,0,0.2)',
             borderRadius: '12px',
@@ -506,7 +506,7 @@ export default function ExtractCustomDashboard() {
         {activeStep === 4 && (
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
             gap: '24px',
             animation: 'fadeIn 0.5s ease'
           }}>
@@ -850,7 +850,7 @@ export default function ExtractCustomDashboard() {
       </div>
 
       {/* Row 3.5: System Operational Flow & Key Takeaways Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
         
         {/* System Flow Diagram List */}
         <div style={{

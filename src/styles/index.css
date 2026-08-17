@@ -483,6 +483,22 @@ body.mode-consultant .btn-secondary:hover {
   .mobile-menu-toggle {
     display: flex !important;
   }
+  .navbar-container {
+    padding: 8px 12px !important;
+  }
+  .mobile-nav-overlay {
+    top: 66px !important;
+    left: 12px !important;
+    right: 12px !important;
+    padding: 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-glass {
+    padding: 8px 12px !important;
+    border-radius: 28px !important;
+  }
 }
 
 .hero-globe-container {
@@ -492,6 +508,57 @@ body.mode-consultant .btn-secondary:hover {
 @media (max-width: 768px) {
   .hero-globe-container {
     height: 320px !important;
+  }
+}
+
+.responsive-2col-grid {
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 768px) {
+  .responsive-2col-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Secondary project nav text toggle */
+.nav-text-desktop {
+  display: inline;
+}
+.nav-text-mobile {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .nav-text-desktop {
+    display: none !important;
+  }
+  .nav-text-mobile {
+    display: inline !important;
+  }
+  .secondary-project-nav {
+    padding: 0 !important;
+  }
+  .case-study-glass-inner {
+    padding: 16px !important;
+    gap: 18px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .crt-workspace-split {
+    flex-direction: column !important;
+    min-height: auto !important;
+  }
+  .crt-workspace-sidebar {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    padding: 8px !important;
+  }
+  .crt-workspace-sidebar > div:first-child {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 8px !important;
   }
 }
 
@@ -512,9 +579,9 @@ body.mode-consultant .btn-secondary:hover {
 @media (max-width: 768px) {
   .project-navigation-bar {
     border-radius: 16px !important;
-    padding: 16px !important;
+    padding: 12px 16px !important;
     flex-direction: column !important;
-    gap: 12px !important;
+    gap: 10px !important;
     align-items: stretch !important;
   }
   .project-navigation-bar > button,

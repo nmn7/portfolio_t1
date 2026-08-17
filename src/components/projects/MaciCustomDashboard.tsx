@@ -4,7 +4,7 @@ export default function MaciCustomDashboard() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', width: '100%' }}>
       {/* Row 1: Problem & Solution Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
         {/* The Problem Card */}
         <div style={{
           backgroundColor: 'rgba(239, 68, 68, 0.02)',
@@ -94,7 +94,7 @@ export default function MaciCustomDashboard() {
 
 
       {/* Row 3: Interactive Dashboards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}>
 
         {/* Left Side: MACI WEB DASHBOARD */}
         <div className="glass-panel" style={{
@@ -121,7 +121,7 @@ export default function MaciCustomDashboard() {
           </div>
 
           {/* Mini Stats Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 110px), 1fr))', gap: '8px' }}>
             {[
               { val: '1,248', label: 'Total Calls', trend: '+15%' },
               { val: '92/100', label: 'Avg Value', trend: '+10%' },
@@ -143,7 +143,7 @@ export default function MaciCustomDashboard() {
           </div>
 
           {/* Donut and Line Chart Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '12px', alignItems: 'center' }}>
 
             {/* Call Value Optimization Donut */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
@@ -279,7 +279,7 @@ export default function MaciCustomDashboard() {
           </div>
 
           {/* Quick Metrics Bar */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 100px), 1fr))', gap: '10px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
               <span style={{ fontSize: '0.6rem', color: 'var(--text-secondary)' }}>Call Value Score</span>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
@@ -361,7 +361,7 @@ export default function MaciCustomDashboard() {
           </div>
 
           {/* Objections & Questions */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))', gap: '12px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
             {/* Objections */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
